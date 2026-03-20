@@ -15,7 +15,7 @@ class User(UserBase):
     is_active: bool
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class Token(BaseModel):
     access_token: str
@@ -42,7 +42,7 @@ class Listing(ListingBase):
     created_at: datetime
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class BookingBase(BaseModel):
     listing_id: int
@@ -58,4 +58,4 @@ class Booking(BookingBase):
     booked_at: datetime
 
     class Config:
-        orm_mode = True
+        from_attributes = True

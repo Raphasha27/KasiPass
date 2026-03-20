@@ -1,8 +1,35 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, ScrollView, ActivityIndicator, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import api from '../services/api';
 
-export default function CheckoutScreen({ navigation }) {
+export default function CheckoutScreen({ navigation, route }) {
+  const { listing } = route.params;
+  const [loading, setLoading] = useState(false);
+
+  const handlePayment = async () => {
+    setLoading(true);
+    try {
+      const res = await api.post('/bookings/', {
+        listing_id: listing.id
+      });
+      
+      Alert.alert(
+        "Payment Successful!", 
+        `Your ticket for ${listing.title} is now in your wallet.`,
+        [{ text: "View Ticket", onPress: () => navigation.navigate('Wallet') }]
+      );
+    } catch (err) {
+      console.error("Booking failed", err);
+      Alert.alert("Error", "Failed to complete booking. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const serviceFee = listing.price * 0.05;
+  const total = listing.price + serviceFee;
+
   return (
     <View className="flex-1 bg-background">
       <View className="pt-16 pb-6 px-6 bg-white border-b border-gray-100 flex-row items-center">
@@ -16,17 +43,17 @@ export default function CheckoutScreen({ navigation }) {
         <View className="bg-white p-6 rounded-3xl shadow-sm">
           <Text className="text-gray-500 font-semibold mb-2">SUMMARY</Text>
           <View className="flex-row justify-between mb-2">
-            <Text className="text-lg">Kwesta Live - VIP Ticket</Text>
-            <Text className="text-lg">R300.00</Text>
+            <Text className="text-lg">{listing.title}</Text>
+            <Text className="text-lg">R{listing.price.toFixed(2)}</Text>
           </View>
           <View className="flex-row justify-between mb-4">
-            <Text className="text-lg text-gray-500">Service Fee</Text>
-            <Text className="text-lg text-gray-500">R15.00</Text>
+            <Text className="text-lg text-gray-500">Service Fee (5%)</Text>
+            <Text className="text-lg text-gray-500">R{serviceFee.toFixed(2)}</Text>
           </View>
           <View className="h-[1px] bg-gray-200 mb-4" />
           <View className="flex-row justify-between">
             <Text className="text-2xl font-bold">Total</Text>
-            <Text className="text-2xl font-bold text-primary">R315.00</Text>
+            <Text className="text-2xl font-bold text-primary">R{total.toFixed(2)}</Text>
           </View>
         </View>
 
@@ -51,13 +78,15 @@ export default function CheckoutScreen({ navigation }) {
 
       <View className="p-6 pb-12">
         <TouchableOpacity 
-          className="bg-primary p-5 rounded-3xl items-center shadow-lg"
-          onPress={() => {
-            alert("Payment Successful!");
-            navigation.navigate('Wallet');
-          }}
+          className={`bg-primary p-5 rounded-3xl items-center shadow-lg ${loading ? 'opacity-50' : ''}`}
+          onPress={handlePayment}
+          disabled={loading}
         >
-          <Text className="text-white text-xl font-bold">Confirm Payment</Text>
+          {loading ? (
+            <ActivityIndicator color="white" />
+          ) : (
+            <Text className="text-white text-xl font-bold">Confirm Payment</Text>
+          )}
         </TouchableOpacity>
       </View>
     </View>

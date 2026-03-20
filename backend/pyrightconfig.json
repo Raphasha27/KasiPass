@@ -1,0 +1,15 @@
+{
+  "include": [
+    "app"
+  ],
+  "pythonVersion": "3.14",
+  "pythonPlatform": "Windows",
+  "pythonPath": "C:\\Python314\\python.exe",
+  "typeCheckingMode": "basic",
+  "reportMissingImports": true,
+  "extraPaths": [
+    "C:\\Python314\\Lib\\site-packages",
+    "C:\\Python314\\Lib",
+    "."
+  ]
+}

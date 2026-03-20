@@ -27,7 +27,7 @@ def create_listing(
     if current_user.role not in ["vendor", "admin"]:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized to create listings")
     
-    db_listing = models.Listing(**listing.dict(), owner_id=current_user.id)
+    db_listing = models.Listing(**listing.model_dump(), owner_id=current_user.id)
     db.add(db_listing)
     db.commit()
     db.refresh(db_listing)

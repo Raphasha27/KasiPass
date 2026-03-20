@@ -6,7 +6,9 @@ QR_DIR = "static/qrcodes"
 
 def generate_qr_data(booking_id: int):
     # Unique identifier for the QR code
-    data = f"KASIPASS-{booking_id}-{uuid.uuid4().hex[:8]}"
+    u_id: str = str(uuid.uuid4().hex)
+    u_id_short = u_id[0:8]
+    data = f"KASIPASS-{booking_id}-{u_id_short}"
     return data
 
 def save_qr_image(data: str):

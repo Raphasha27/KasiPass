@@ -1,0 +1,26 @@
+[project]
+name = "kasipass-backend"
+version = "0.1.0"
+description = "KasiPass Community OS Backend"
+dependencies = [
+    "fastapi",
+    "uvicorn",
+    "sqlalchemy",
+    "psycopg2-binary",
+    "python-dotenv",
+    "passlib[bcrypt]",
+    "python-jose[cryptography]",
+    "qrcode",
+    "pillow",
+    "python-multipart",
+    "requests",
+    "email-validator",
+]
+
+[tool.pyright]
+include = ["app"]
+reportMissingImports = true
+reportMissingTypeStubs = false
+pythonVersion = "3.12"
+pythonPlatform = "Windows"
+typeCheckingMode = "basic"
