@@ -1,16 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Image, TextInput, ActivityIndicator } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Image, TextInput, ActivityIndicator, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
-
-const CATEGORIES = [
-  { id: '1', name: 'Events', icon: 'musical-notes', color: '#FDCC0D', screen: 'Explore' },
-  { id: '2', name: 'Transport', icon: 'bus', color: '#00A86B', screen: 'TaxiTracking' },
-  { id: '3', name: 'Food', icon: 'restaurant', color: '#FF4D4D', screen: 'Restaurants' },
-  { id: '4', name: 'Services', icon: 'construct', color: '#9CA3AF', screen: 'Explore' },
-  { id: '5', name: 'Wallet', icon: 'wallet', color: '#00A86B', screen: 'Wallet' },
-];
+import { LinearGradient } from 'expo-linear-gradient';
 
 export default function HomeScreen({ navigation }) {
   const { user } = useAuth();
@@ -30,100 +23,128 @@ export default function HomeScreen({ navigation }) {
     })();
   }, []);
 
+  const categories = [
+    { id: '1', name: 'Events', icon: 'calendar', color: '#FDCC0D', desc: 'Modern description', screen: 'Explore' },
+    { id: '2', name: 'Transport', icon: 'bus', color: '#00A86B', desc: 'Transport and description', screen: 'TaxiTracking' },
+    { id: '3', name: 'Services', icon: 'settings', color: '#4CD964', desc: 'Services description', screen: 'Explore' },
+    { id: '4', name: 'Security', icon: 'shield-sharp', color: '#FF3B30', desc: 'SDU Protection', screen: 'Security' },
+  ];
+
   return (
-    <ScrollView className="flex-1 bg-[#F9FAFB] px-6">
-      <View className="pt-16 pb-6 flex-row justify-between items-center">
-        <View>
-          <Text className="text-gray-500 font-bold mb-1 italic">Welcome back,</Text>
-          <Text className="text-3xl font-black italic uppercase italic tracking-tighter">{user?.full_name?.split(' ')[0] || 'Guest'}!</Text>
-          <View className="flex-row items-center mt-1">
-            <Icon name="location-outline" size={16} color="#00A86B" />
-            <Text className="text-primary font-bold ml-1 text-xs uppercase tracking-widest">Atteridgeville Focus Active</Text>
+    <View style={styles.container}>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 100 }}>
+        
+        {/* Header */}
+        <View style={styles.header}>
+          <View>
+            <Text style={styles.greeting}>Hi, {user?.full_name?.split(' ')[0] || 'Thabo'}!</Text>
           </View>
-        </View>
-        <TouchableOpacity className="bg-white p-3 rounded-2xl shadow-sm border border-gray-100">
-          <Icon name="notifications-outline" size={24} color="#00A86B" />
-        </TouchableOpacity>
-      </View>
-
-      <View className="bg-white flex-row items-center p-4 rounded-[25px] border border-gray-100 shadow-sm mt-4">
-        <Icon name="search" size={20} color="#9CA3AF" />
-        <TextInput 
-          placeholder="Search items in Atteridgeville..." 
-          className="ml-3 flex-1 text-lg font-medium"
-          placeholderTextColor="#9CA3AF"
-        />
-        <TouchableOpacity className="bg-primary p-2 rounded-xl">
-           <Icon name="options-outline" size={20} color="white" />
-        </TouchableOpacity>
-      </View>
-
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} className="mt-8">
-        {CATEGORIES.map(cat => (
-          <TouchableOpacity 
-            key={cat.id} 
-            className="items-center mr-8"
-            onPress={() => navigation.navigate(cat.screen, { category: cat.name })}
-          >
-            <View 
-              className="w-16 h-16 rounded-2xl justify-center items-center mb-2 shadow-sm"
-              style={{ backgroundColor: `${cat.color}15` }}
-            >
-              <Icon name={cat.icon} size={28} color={cat.color} />
-            </View>
-            <Text className="font-black text-[10px] text-gray-500 tracking-widest uppercase">{cat.name}</Text>
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
-
-      {/* Atteridgeville Feature Banner */}
-      <View className="mt-10 rounded-[40px] overflow-hidden bg-black shadow-2xl shadow-black/40 h-52">
-        <Image 
-          source={{ uri: 'https://images.unsplash.com/photo-1543165365-07232ed12faf?q=80&w=800' }} 
-          className="w-full h-full opacity-60" 
-        />
-        <View className="absolute inset-0 p-8 justify-center">
-          <Text className="text-white text-3xl font-black uppercase italic tracking-tighter">Hot in Atteridgeville</Text>
-          <Text className="text-white font-bold opacity-80 mt-1 max-w-[200px]">Live taxi status & local weekend party tickets now available.</Text>
-          <TouchableOpacity className="bg-primary self-start mt-6 px-8 py-3 rounded-full shadow-lg shadow-primary">
-             <Text className="text-white font-bold uppercase tracking-tighter">View Focus Map</Text>
+          <TouchableOpacity style={styles.profileBadge}>
+             <Text style={styles.profileInitials}>TM</Text>
+             <View style={styles.onlineDot} />
           </TouchableOpacity>
         </View>
-      </View>
 
-      <View className="flex-row justify-between items-center mt-12 mb-6">
-        <Text className="text-2xl font-black uppercase italic tracking-tighter">Nearby Deals</Text>
-        <TouchableOpacity onPress={() => navigation.navigate('Explore')}>
-          <Text className="text-primary font-bold italic">See all</Text>
-        </TouchableOpacity>
-      </View>
+        {/* Search */}
+        <View style={styles.searchContainer}>
+          <Icon name="search-outline" size={20} color="#8E8E93" />
+          <TextInput 
+            placeholder="Explore Kasi..." 
+            placeholderTextColor="#8E8E93"
+            style={styles.searchInput}
+          />
+        </View>
 
-      <View className="pb-24">
-        {loading ? (
-          <ActivityIndicator color="#00A86B" size="large" />
-        ) : (
-          listings.map(item => (
+        {/* Categories */}
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.categoryScroll}>
+          {categories.map(cat => (
             <TouchableOpacity 
-              key={item.id}
-              className="bg-white p-4 rounded-[30px] flex-row items-center border border-gray-50 shadow-sm mb-4"
-              onPress={() => navigation.navigate('ListingDetail', { listingId: item.id })}
+              key={cat.id} 
+              style={styles.categoryCard}
+              onPress={() => navigation.navigate(cat.screen)}
             >
-              <Image source={{ uri: item.image_url || 'https://via.placeholder.com/150' }} className="w-24 h-24 rounded-[25px]" />
-              <View className="ml-4 flex-1">
-                <Text className="text-lg font-black text-[#1A1A1A] italic" numberOfLines={1}>{item.title}</Text>
-                <Text className="text-gray-400 font-bold uppercase text-[10px] tracking-widest">{item.location}</Text>
-                <View className="flex-row items-center mt-2">
-                   <Text className="text-primary font-black text-xl">R{item.price}</Text>
-                   <View className="ml-3 bg-primary/10 px-2 py-0.5 rounded-full">
-                      <Text className="text-primary text-[8px] font-black uppercase">Instant</Text>
-                   </View>
-                </View>
+              <View style={[styles.iconBox, { backgroundColor: cat.color }]}>
+                <Icon name={cat.icon} size={24} color="white" />
               </View>
-              <Icon name="chevron-forward" size={20} color="#E5E7EB" />
+              <Text style={styles.catName}>{cat.name}</Text>
+              <Text style={styles.catDesc} numberOfLines={1}>{cat.desc}</Text>
             </TouchableOpacity>
-          ))
-        )}
-      </View>
-    </ScrollView>
+          ))}
+        </ScrollView>
+
+        {/* Section Header */}
+        <View style={styles.sectionHeader}>
+          <Text style={styles.sectionTitle}>Nearby Deals</Text>
+          <TouchableOpacity onPress={() => navigation.navigate('Explore')}>
+            <Text style={styles.seeAll}>See All</Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* Deals Grid */}
+        <View style={styles.dealsGrid}>
+          {loading ? (
+            <ActivityIndicator color="#00A86B" style={{ marginTop: 20 }} />
+          ) : (
+            listings.map(item => (
+              <TouchableOpacity 
+                key={item.id} 
+                style={styles.dealCard}
+                onPress={() => navigation.navigate('ListingDetail', { listingId: item.id })}
+              >
+                <Image source={{ uri: item.image_url || 'https://images.unsplash.com/photo-1543165365-07232ed12faf?q=80&w=400' }} style={styles.dealImage} />
+                <View style={styles.dealInfo}>
+                  <Text style={styles.dealTitle} numberOfLines={1}>{item.title}</Text>
+                  <View style={styles.ratingRow}>
+                    <Icon name="star" size={12} color="#FDCC0D" />
+                    <Icon name="star" size={12} color="#FDCC0D" />
+                    <Icon name="star" size={12} color="#FDCC0D" />
+                    <Icon name="star" size={12} color="#FDCC0D" />
+                    <Text style={styles.ratingText}> Rating</Text>
+                  </View>
+                  <View style={styles.dealFooter}>
+                    <View style={styles.distRow}>
+                      <Icon name="location-outline" size={12} color="#8E8E93" />
+                      <Text style={styles.distText}> Distance</Text>
+                    </View>
+                    <Text style={styles.priceText}>R{item.price}</Text>
+                  </View>
+                </View>
+              </TouchableOpacity>
+            ))
+          )}
+        </View>
+
+      </ScrollView>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: { flex: 1, backgroundColor: '#FFFFFF' },
+  header: { paddingHorizontal: 20, paddingTop: 60, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  greeting: { fontSize: 24, fontWeight: '900', color: '#1A1A1A' },
+  profileBadge: { width: 40, height: 40, borderRadius: 20, backgroundColor: '#E5E5EA', alignItems: 'center', justifyContent: 'center' },
+  profileInitials: { fontWeight: 'bold', color: '#8E8E93' },
+  onlineDot: { position: 'absolute', bottom: 0, right: 0, width: 10, height: 10, borderRadius: 5, backgroundColor: '#4CD964', borderWeight: 2, borderColor: 'white' },
+  searchContainer: { marginHorizontal: 20, marginTop: 20, backgroundColor: '#F2F2F7', borderRadius: 15, paddingHorizontal: 15, height: 50, flexDirection: 'row', alignItems: 'center' },
+  searchInput: { flex: 1, marginLeft: 10, fontSize: 16, fontWeight: '500' },
+  categoryScroll: { marginTop: 25, paddingLeft: 20 },
+  categoryCard: { width: 110, height: 120, marginRight: 15, backgroundColor: 'white', borderRadius: 20, padding: 15, shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.05, shadowRadius: 10, elevation: 5, borderWidth: 1, borderColor: '#F2F2F7' },
+  iconBox: { width: 36, height: 36, borderRadius: 12, alignItems: 'center', justifyContent: 'center', marginBottom: 10 },
+  catName: { fontSize: 13, fontWeight: 'bold', color: '#1C1C1E' },
+  catDesc: { fontSize: 9, color: '#8E8E93', marginTop: 4 },
+  sectionHeader: { marginHorizontal: 20, marginTop: 35, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  sectionTitle: { fontSize: 20, fontWeight: 'bold', color: '#1C1C1E' },
+  seeAll: { fontSize: 14, color: '#00A86B', fontWeight: 'bold' },
+  dealsGrid: { paddingHorizontal: 20, marginTop: 20, flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' },
+  dealCard: { width: '48%', backgroundColor: 'white', borderRadius: 25, marginBottom: 20, shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.05, shadowRadius: 10, elevation: 5, overflow: 'hidden' },
+  dealImage: { width: '100%', height: 120 },
+  dealInfo: { padding: 12 },
+  dealTitle: { fontWeight: 'bold', fontSize: 14, color: '#1C1C1E' },
+  ratingRow: { flexDirection: 'row', alignItems: 'center', marginTop: 4 },
+  ratingText: { fontSize: 10, color: '#8E8E93', marginLeft: 4 },
+  dealFooter: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 8 },
+  distRow: { flexDirection: 'row', alignItems: 'center' },
+  distText: { fontSize: 10, color: '#8E8E93' },
+  priceText: { fontSize: 14, fontWeight: 'bold', color: '#00A86B' }
+});

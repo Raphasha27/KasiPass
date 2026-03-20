@@ -2,7 +2,7 @@ from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from . import models, schemas, auth, database
-from .routes import users, listings, bookings, chat, taxi
+from .routes import users, listings, bookings, chat, taxi, security
 from .database import engine
 
 models.Base.metadata.create_all(bind=engine)
@@ -26,3 +26,4 @@ app.include_router(listings.router, prefix="/listings", tags=["listings"])
 app.include_router(bookings.router, prefix="/bookings", tags=["bookings"])
 app.include_router(chat.router, prefix="/chat", tags=["chat"])
 app.include_router(taxi.router, prefix="/taxi", tags=["taxi"])
+app.include_router(security.router, prefix="/security", tags=["security"])

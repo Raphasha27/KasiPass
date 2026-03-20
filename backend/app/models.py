@@ -73,3 +73,14 @@ class TaxiLocation(Base):
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     driver = relationship("User")
+
+class PanicAlert(Base):
+    __tablename__ = "panic_alerts"
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"))
+    latitude = Column(Float)
+    longitude = Column(Float)
+    status = Column(String, default="active") # active, resolved, cancelled
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    user = relationship("User")

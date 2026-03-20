@@ -1,13 +1,45 @@
 {
-  "plugins": [
-    "expo-asset"
-  ],
-  "android": {
-    "package": "com.anonymous.kasipass"
-  },
-  "extra": {
-    "eas": {
-      "projectId": "4ae3d89d-006d-4ab6-ac35-065b3ecf62ce"
+  "expo": {
+    "name": "KasiPass",
+    "slug": "kasipass",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#0A0A0A"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.kasipass.app"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#0A0A0A"
+      },
+      "package": "com.kasipass.app",
+      "permissions": [
+        "CAMERA",
+        "NOTIFICATIONS"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+       "expo-asset",
+       "expo-barcode-scanner"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "4ae3d89d-006d-4ab6-ac35-065b3ecf62ce"
+      }
     }
   }
 }

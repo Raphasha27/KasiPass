@@ -91,3 +91,19 @@ class TaxiLocation(TaxiLocationBase):
 
     class Config:
         from_attributes = True
+
+class PanicAlertBase(BaseModel):
+    latitude: float
+    longitude: float
+
+class PanicAlertCreate(PanicAlertBase):
+    pass
+
+class PanicAlert(PanicAlertBase):
+    id: int
+    user_id: int
+    status: str
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
