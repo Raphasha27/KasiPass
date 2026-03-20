@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, ScrollView, Image, TouchableOpacity, FlatList, Alert } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import { Ionicons as Icon } from '@expo/vector-icons';
 
 const RESTAURANTS = [
   { id: '1', name: 'Soweto Grillhouse', cuisine: 'Braai & Grill', rating: 4.8, distance: '1.2km', image: 'https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=400' },

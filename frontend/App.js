@@ -1,12 +1,13 @@
 import 'react-native-gesture-handler';
 import { enableScreens } from 'react-native-screens';
+import { registerRootComponent } from 'expo';
 enableScreens();
 import React from 'react';
 import { ActivityIndicator, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Icon from 'react-native-vector-icons/Ionicons';
+import { Ionicons as Icon } from '@expo/vector-icons';
 
 import { AuthProvider, useAuth } from './context/AuthContext';
 
@@ -101,7 +102,6 @@ function AppNavigator() {
     </NavigationContainer>
   );
 }
-
 export default function App() {
   return (
     <AuthProvider>
@@ -109,3 +109,5 @@ export default function App() {
     </AuthProvider>
   );
 }
+
+registerRootComponent(App);

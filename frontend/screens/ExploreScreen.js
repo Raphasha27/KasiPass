@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, TextInput, TouchableOpacity, Image, ScrollView, ActivityIndicator } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import { Ionicons as Icon } from '@expo/vector-icons';
 import api from '../services/api';
 
 const FILTER_ITEMS = ['Near Me', 'Today', 'Price: Low to High', 'VIP Only'];
