@@ -1,8 +1,9 @@
 import axios from 'axios';
 import { Platform } from 'react-native';
 
-// For local testing on Android emulator, use 10.0.2.2. For iOS or real device, use your machine's IP.
-const BASE_URL = Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost:8000';
+// IMPORTANT: For real devices, use your machine's local IP (e.g., 172.20.6.221)
+// Your current machine IP (from Expo Go screenshot): 172.20.6.221
+const BASE_URL = 'http://172.20.6.221:8000';
 
 const api = axios.create({
   baseURL: BASE_URL,

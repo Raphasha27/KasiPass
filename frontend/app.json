@@ -4,5 +4,10 @@
   ],
   "android": {
     "package": "com.anonymous.kasipass"
+  },
+  "extra": {
+    "eas": {
+      "projectId": "4ae3d89d-006d-4ab6-ac35-065b3ecf62ce"
+    }
   }
 }

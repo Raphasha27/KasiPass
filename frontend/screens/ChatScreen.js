@@ -59,7 +59,7 @@ export default function ChatScreen({ navigation }) {
   return (
     <View className="flex-1 bg-background">
       <View className="pt-16 pb-6 px-6 bg-white border-b border-gray-100 flex-row justify-between items-center">
-        <h1 className="text-3xl font-black italic uppercase italic tracking-tighter">Messages</h1>
+        <Text className="text-3xl font-black italic uppercase italic tracking-tighter">Messages</Text>
         <TouchableOpacity onPress={fetchUsers}>
           <Icon name="refresh" size={24} />
         </TouchableOpacity>

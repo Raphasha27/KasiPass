@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, Animated, Image, ActivityIndicator, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import api from '../services/api';
@@ -85,8 +85,8 @@ export default function TaxiTrackingScreen({ navigation }) {
       {/* Floating Panel */}
       <View className="bg-white rounded-t-[50px] p-8 -mt-10 h-1/3 shadow-2xl">
         <View className="w-12 h-1.5 bg-gray-200 rounded-full mb-6 mx-auto" />
-        <h2 className="text-3xl font-black italic uppercase tracking-tighter">Your <span className="text-primary">Kasi</span> Ride</h2>
-        <p className="text-gray-500 mt-2">Available taxis in Atteridgeville right now.</p>
+        <Text className="text-3xl font-black italic uppercase tracking-tighter">Your <Text className="text-primary">Kasi</Text> Ride</Text>
+        <Text className="text-gray-500 mt-2">Available taxis in Atteridgeville right now.</Text>
         
         <View className="mt-8 flex-row justify-between items-center bg-gray-100 p-6 rounded-3xl">
             <View>
