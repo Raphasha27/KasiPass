@@ -25,7 +25,6 @@
       },
       "package": "com.kasipass.app",
       "permissions": [
-        "CAMERA",
         "NOTIFICATIONS"
       ]
     },
@@ -33,8 +32,7 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-       "expo-asset",
-       "expo-barcode-scanner"
+       "expo-asset"
     ],
     "extra": {
       "eas": {

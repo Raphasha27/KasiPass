@@ -16,14 +16,12 @@ import ChatScreen from './screens/ChatScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import ListingDetailScreen from './screens/ListingDetailScreen';
 import CheckoutScreen from './screens/CheckoutScreen';
-import ScannerScreen from './screens/ScannerScreen';
 import VendorDashboard from './screens/VendorDashboard';
 import RestaurantScreen from './screens/RestaurantScreen';
 import OrderScreen from './screens/OrderScreen';
 import CreateListingScreen from './screens/CreateListingScreen';
 import ConversationScreen from './screens/ConversationScreen';
 import TaxiTrackingScreen from './screens/TaxiTrackingScreen';
-import SecurityScreen from './screens/SecurityScreen';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -88,14 +86,12 @@ function AppNavigator() {
             <Stack.Screen name="Main" component={MainTabs} />
             <Stack.Screen name="ListingDetail" component={ListingDetailScreen} />
             <Stack.Screen name="Checkout" component={CheckoutScreen} />
-            <Stack.Screen name="Scanner" component={ScannerScreen} />
             <Stack.Screen name="VendorDashboard" component={VendorDashboard} />
             <Stack.Screen name="Restaurants" component={RestaurantScreen} />
             <Stack.Screen name="Order" component={OrderScreen} />
             <Stack.Screen name="CreateListing" component={CreateListingScreen} />
             <Stack.Screen name="Conversation" component={ConversationScreen} />
             <Stack.Screen name="TaxiTracking" component={TaxiTrackingScreen} />
-            <Stack.Screen name="Security" component={SecurityScreen} />
           </>
         )}
       </Stack.Navigator>

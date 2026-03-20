@@ -27,7 +27,6 @@ export default function HomeScreen({ navigation }) {
     { id: '1', name: 'Events', icon: 'calendar', color: '#FDCC0D', desc: 'Modern description', screen: 'Explore' },
     { id: '2', name: 'Transport', icon: 'bus', color: '#00A86B', desc: 'Transport and description', screen: 'TaxiTracking' },
     { id: '3', name: 'Services', icon: 'settings', color: '#4CD964', desc: 'Services description', screen: 'Explore' },
-    { id: '4', name: 'Security', icon: 'shield-sharp', color: '#FF3B30', desc: 'SDU Protection', screen: 'Security' },
   ];
 
   return (
