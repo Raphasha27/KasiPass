@@ -21,6 +21,8 @@ import VendorDashboard from './screens/VendorDashboard';
 import RestaurantScreen from './screens/RestaurantScreen';
 import OrderScreen from './screens/OrderScreen';
 import CreateListingScreen from './screens/CreateListingScreen';
+import ConversationScreen from './screens/ConversationScreen';
+import TaxiTrackingScreen from './screens/TaxiTrackingScreen';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -79,10 +81,8 @@ function AppNavigator() {
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         {!user ? (
-          // Auth flow
           <Stack.Screen name="Login" component={LoginScreen} />
         ) : (
-          // App flow
           <>
             <Stack.Screen name="Main" component={MainTabs} />
             <Stack.Screen name="ListingDetail" component={ListingDetailScreen} />
@@ -92,6 +92,8 @@ function AppNavigator() {
             <Stack.Screen name="Restaurants" component={RestaurantScreen} />
             <Stack.Screen name="Order" component={OrderScreen} />
             <Stack.Screen name="CreateListing" component={CreateListingScreen} />
+            <Stack.Screen name="Conversation" component={ConversationScreen} />
+            <Stack.Screen name="TaxiTracking" component={TaxiTrackingScreen} />
           </>
         )}
       </Stack.Navigator>

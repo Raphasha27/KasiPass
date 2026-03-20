@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KasiPass Live Demo Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Outfit', sans-serif; background: #0A0A0A; color: #fff; overflow-x: hidden; }
+        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .primary-gradient { background: linear-gradient(135deg, #00A86B 0%, #007A4D 100%); }
+        .ticket-cut { clip-path: polygon(0 0, 100% 0, 100% 70%, 95% 75%, 100% 80%, 100% 100%, 0 100%, 0 80%, 5% 75%, 0 70%); }
+        .screen { display: none; transition: 0.3s; }
+        .screen.active { display: block; animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .nav-item.active { color: #00A86B; }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+
+    <!-- Mobile Frame -->
+    <div class="relative w-[390px] h-[844px] bg-[#0A0A0A] rounded-[60px] border-[12px] border-[#1A1A1A] shadow-2xl overflow-hidden">
+        <!-- Status Bar -->
+        <div class="w-full h-12 flex justify-between items-center px-8 pt-6 z-50">
+            <span class="text-sm font-semibold">9:41</span>
+            <div class="flex gap-1.5 items-center">
+                <i data-lucide="signal" class="w-4 h-4"></i>
+                <i data-lucide="wifi" class="w-4 h-4"></i>
+                <i data-lucide="battery" class="w-5 h-5"></i>
+            </div>
+        </div>
+
+        <!-- MAIN SCROLL AREA -->
+        <div class="h-[calc(100%-160px)] overflow-y-auto mt-4 px-6 pb-20 no-scrollbar">
+            
+            <!-- HOME SCREEN -->
+            <div id="home" class="screen active">
+                <header class="flex justify-between items-center mb-8">
+                    <div>
+                        <h1 class="text-3xl font-bold">Hi, Thabo! 👋</h1>
+                        <p class="text-gray-400 flex items-center gap-1 mt-1">
+                            <i data-lucide="map-pin" class="w-4 h-4 text-[#00A86B]"></i> Soweto, GP
+                        </p>
+                    </div>
+                    <div class="w-12 h-12 rounded-full glass flex items-center justify-center relative">
+                         <i data-lucide="bell" class="w-6 h-6"></i>
+                         <div class="absolute top-3 right-3 w-2 h-2 bg-[#00A86B] rounded-full border-2 border-[#0A0A0A]"></div>
+                    </div>
+                </header>
+
+                <!-- Search -->
+                <div class="glass p-4 rounded-2xl flex items-center gap-3 mb-8">
+                    <i data-lucide="search" class="text-gray-500 w-5 h-5"></i>
+                    <input type="text" placeholder="Find taxis, events, food..." class="bg-transparent border-none focus:outline-none flex-1 text-gray-300">
+                </div>
+
+                <!-- Categories -->
+                <div class="flex gap-4 mb-10 overflow-x-auto pb-2">
+                    <div class="flex flex-col items-center gap-2 flex-shrink-0">
+                        <div class="w-16 h-16 glass rounded-2xl flex items-center justify-center text-[#FDCC0D]"><i data-lucide="music" class="w-8 h-8"></i></div>
+                        <span class="text-xs font-semibold">Events</span>
+                    </div>
+                    <div class="flex flex-col items-center gap-2 flex-shrink-0">
+                        <div class="w-16 h-16 glass rounded-2xl flex items-center justify-center text-[#00A86B]"><i data-lucide="bus" class="w-8 h-8"></i></div>
+                        <span class="text-xs font-semibold">Transport</span>
+                    </div>
+                    <div class="flex flex-col items-center gap-2 flex-shrink-0">
+                        <div class="w-16 h-16 glass rounded-2xl flex items-center justify-center text-[#FF4D4D]"><i data-lucide="utensils" class="w-8 h-8"></i></div>
+                        <span class="text-xs font-semibold">Food</span>
+                    </div>
+                    <div class="flex flex-col items-center gap-2 flex-shrink-0">
+                        <div class="w-16 h-16 glass rounded-2xl flex items-center justify-center text-[#9CA3AF]"><i data-lucide="layout-grid" class="w-8 h-8"></i></div>
+                        <span class="text-xs font-semibold">More</span>
+                    </div>
+                </div>
+
+                <!-- Featured Card -->
+                <div class="relative w-full h-48 rounded-[30px] overflow-hidden mb-10">
+                    <img src="https://images.unsplash.com/photo-1543165365-07232ed12faf?q=80&w=600" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent p-6 flex flex-col justify-end">
+                        <h2 class="text-2xl font-bold">Kwesta Live</h2>
+                        <p class="text-gray-300 mt-1">Orlando Stadium • R80.00</p>
+                    </div>
+                </div>
+
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-xl font-bold">Nearby Deals</h3>
+                    <span class="text-[#00A86B] font-semibold italic">See all</span>
+                </div>
+
+                <!-- List Items -->
+                <div class="space-y-4">
+                    <div class="glass p-4 rounded-3xl flex items-center gap-4">
+                        <div class="w-16 h-16 bg-[#1A1A1A] rounded-2xl flex items-center justify-center"><i data-lucide="truck" class="text-[#00A86B] w-8 h-8"></i></div>
+                        <div class="flex-1">
+                            <h4 class="font-bold">Township Delivery</h4>
+                            <p class="text-sm text-gray-500">Fast & Secure • From R15</p>
+                        </div>
+                        <i data-lucide="chevron-right" class="text-gray-600"></i>
+                    </div>
+                    <div class="glass p-4 rounded-3xl flex items-center gap-4">
+                        <div class="w-16 h-16 bg-[#1A1A1A] rounded-2xl flex items-center justify-center"><i data-lucide="scissors" class="text-[#FDCC0D] w-8 h-8"></i></div>
+                        <div class="flex-1">
+                            <h4 class="font-bold">Fresh Kasi Cuts</h4>
+                            <p class="text-sm text-gray-500">Open now • Diepkloof</p>
+                        </div>
+                        <i data-lucide="chevron-right" class="text-gray-600"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- WALLET SCREEN -->
+            <div id="wallet" class="screen">
+                <header class="mb-10 text-center">
+                    <h1 class="text-3xl font-bold">My Wallet</h1>
+                    <p class="text-gray-400 mt-2">Manage your tickets & payments</p>
+                </header>
+
+                <!-- Ticket -->
+                <div class="bg-white rounded-[30px] p-6 text-[#0A0A0A] overflow-hidden relative ticket-cut shadow-2xl">
+                    <div class="flex justify-between items-start mb-10">
+                        <div>
+                            <span class="text-[10px] font-bold tracking-[0.2em] text-[#00A86B]">KASIPASS TICKET</span>
+                            <h2 class="text-2xl font-black mt-1 uppercase italic">Kwesta Live</h2>
+                        </div>
+                        <div class="w-10 h-10 primary-gradient rounded-full flex items-center justify-center">
+                            <i data-lucide="ticket" class="w-6 h-6 text-white transform rotate-[-45deg]"></i>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 mb-10">
+                        <div>
+                            <p class="text-[10px] uppercase font-bold text-gray-400">Date</p>
+                            <p class="font-bold">25 Dec 2026</p>
+                        </div>
+                        <div>
+                            <p class="text-[10px] uppercase font-bold text-gray-400">Seat</p>
+                            <p class="font-bold">VIP SECTION</p>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col items-center justify-center border-t-2 border-dashed border-gray-200 pt-12 pb-6">
+                        <div class="bg-white p-4 rounded-2xl border-4 border-[#0A0A0A]/5">
+                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=KASIPASS-TICKET-V1-X99" class="w-40 h-40">
+                        </div>
+                        <p class="mt-6 text-[10px] font-bold tracking-[0.3em] text-gray-400">#KASIP-992-001</p>
+                    </div>
+                </div>
+
+                <div class="mt-12 space-y-4">
+                    <button class="w-full primary-gradient p-5 rounded-3xl font-bold flex items-center justify-center gap-2 shadow-lg shadow-[#00A86B]/30 hover:scale-[1.02] transition">
+                        <i data-lucide="plus" class="w-5 h-5"></i> Top Up Balance
+                    </button>
+                    <button class="w-full glass p-5 rounded-3xl font-bold text-gray-400 flex items-center justify-center gap-2">
+                        View Past Deliveries
+                    </button>
+                </div>
+            </div>
+
+            <!-- PROFILE SCREEN -->
+            <div id="profile" class="screen">
+                <div class="flex flex-col items-center mt-6">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?q=80&w=200" class="w-32 h-32 rounded-full border-4 border-[#00A86B] object-cover">
+                        <div class="absolute bottom-1 right-1 w-8 h-8 primary-gradient rounded-full flex items-center justify-center border-4 border-[#0A0A0A]">
+                            <i data-lucide="camera" class="w-3.5 h-3.5"></i>
+                        </div>
+                    </div>
+                    <h2 class="text-3xl font-bold mt-6 tracking-tight">Thabo Mchize</h2>
+                    <p class="text-gray-500 font-medium font-mono text-xs mt-1">SOWETO • VENDOR ID: #229</p>
+                </div>
+
+                <!-- Vendor Mode Toggle -->
+                <div class="glass p-5 rounded-[30px] mt-12 flex justify-between items-center">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center"><i data-lucide="briefcase" class="w-6 h-6 text-[#00A86B]"></i></div>
+                        <div>
+                            <p class="font-bold">Vendor Mode</p>
+                            <p class="text-sm text-[#00A86B] font-bold italic tracking-wide">ACTIVE ACCESS</p>
+                        </div>
+                    </div>
+                    <div id="mode-toggle" class="w-14 h-8 primary-gradient rounded-full relative cursor-pointer shadow-inner">
+                        <div class="absolute right-1 top-1 w-6 h-6 bg-white rounded-full shadow-lg"></div>
+                    </div>
+                </div>
+
+                <div class="mt-8 space-y-4">
+                    <div class="glass p-5 rounded-[30px] flex justify-between items-center group cursor-pointer hover:bg-white/5 transition">
+                        <div class="flex items-center gap-4">
+                            <i data-lucide="settings" class="text-gray-500"></i>
+                            <span class="font-semibold text-lg">Settings</span>
+                        </div>
+                        <i data-lucide="chevron-right" class="text-gray-700 group-hover:text-[#00A86B]"></i>
+                    </div>
+                    <div class="glass p-5 rounded-[30px] flex justify-between items-center group cursor-pointer hover:bg-white/5 transition">
+                        <div class="flex items-center gap-4">
+                            <i data-lucide="scan" class="text-gray-500"></i>
+                            <span class="font-semibold text-lg">Scanner History</span>
+                        </div>
+                        <i data-lucide="chevron-right" class="text-gray-700 group-hover:text-[#00A86B]"></i>
+                    </div>
+                    <div class="p-5 rounded-[30px] flex items-center justify-center mt-6">
+                        <button class="text-[#FF4D4D] font-black text-lg tracking-widest uppercase hover:opacity-80 transition">LOGOUT</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- NAVIGATION -->
+        <div class="absolute bottom-0 w-full h-24 glass border-0 flex justify-around items-center px-6 pb-2">
+            <button onclick="showScreen('home')" class="nav-item active flex flex-col items-center gap-1">
+                <i data-lucide="home" class="w-6 h-6"></i>
+                <span class="text-[10px] font-bold">HOME</span>
+            </button>
+            <button onclick="showScreen('explore')" class="nav-item text-gray-600 flex flex-col items-center gap-1">
+                <i data-lucide="search" class="w-6 h-6"></i>
+                <span class="text-[10px] font-bold">EXPLORE</span>
+            </button>
+            <button onclick="showScreen('wallet')" class="nav-item text-gray-600 flex flex-col items-center gap-1">
+                <i data-lucide="wallet" class="w-6 h-6"></i>
+                <span class="text-[10px] font-bold">WALLET</span>
+            </button>
+            <button onclick="showScreen('profile')" class="nav-item text-gray-600 flex flex-col items-center gap-1">
+                <i data-lucide="user" class="w-6 h-6"></i>
+                <span class="text-[10px] font-bold">PROFILE</span>
+            </button>
+        </div>
+
+    </div>
+
+    <!-- Instructions for User -->
+    <div class="hidden lg:block ml-20 max-w-sm">
+        <h2 class="text-4xl font-black mb-6 italic tracking-tight uppercase leading-none">The <span class="text-[#00A86B]">Community</span> Operating System.</h2>
+        <div class="space-y-6 text-gray-400">
+            <p class="leading-relaxed">This interactive live demo simulates the KasiPass MVP. Use the navigation bar below the mobile frame to switch screens.</p>
+            <div class="space-y-3">
+                <div class="flex gap-4 items-start">
+                    <div class="w-8 h-8 primary-gradient rounded-lg flex items-center justify-center flex-shrink-0 text-white"><i data-lucide="check" class="w-4 h-4"></i></div>
+                    <p><span class="text-white font-bold">Auth Flow:</span> JWT-powered login & registration enabled.</p>
+                </div>
+                <div class="flex gap-4 items-start">
+                    <div class="w-8 h-8 primary-gradient rounded-lg flex items-center justify-center flex-shrink-0 text-white"><i data-lucide="check" class="w-4 h-4"></i></div>
+                    <p><span class="text-white font-bold">Marketplace:</span> Dynamic listing management for events & services.</p>
+                </div>
+                <div class="flex gap-4 items-start">
+                    <div class="w-8 h-8 primary-gradient rounded-lg flex items-center justify-center flex-shrink-0 text-white"><i data-lucide="check" class="w-4 h-4"></i></div>
+                    <p><span class="text-white font-bold">Ticketing:</span> Real-time QR generation and validation flow.</p>
+                </div>
+            </div>
+            <p class="pt-6 font-mono text-xs text-[#00A86B]">REMOTE_COMMITS: DONE | DATABASE: SEEDED | MVP: LIVE</p>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        function showScreen(id) {
+            // Hide all screens
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            // Deactivate all nav items
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active', 'text-[#00A86B]'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.add('text-gray-600'));
+
+            // Show target screen
+            const target = document.getElementById(id);
+            if(target) target.classList.add('active');
+
+            // Find clicked nav item and activate it
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(ni => {
+                if(ni.getAttribute('onclick').includes(id)) {
+                    ni.classList.add('active', 'text-[#00A86B]');
+                    ni.classList.remove('text-gray-600');
+                }
+            });
+        }
+    </script>
+</body>
+</html>

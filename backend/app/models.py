@@ -50,3 +50,26 @@ class DeliveryRequest(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
 
     booking = relationship("Booking")
+
+class Message(Base):
+    __tablename__ = "messages"
+    id = Column(Integer, primary_key=True, index=True)
+    sender_id = Column(Integer, ForeignKey("users.id"))
+    receiver_id = Column(Integer, ForeignKey("users.id"))
+    content = Column(String)
+    timestamp = Column(DateTime, default=datetime.utcnow)
+    is_read = Column(Boolean, default=False)
+
+    sender = relationship("User", foreign_keys=[sender_id])
+    receiver = relationship("User", foreign_keys=[receiver_id])
+
+class TaxiLocation(Base):
+    __tablename__ = "taxi_locations"
+    id = Column(Integer, primary_key=True, index=True)
+    driver_id = Column(Integer, ForeignKey("users.id"), unique=True)
+    latitude = Column(Float)
+    longitude = Column(Float)
+    status = Column(String, default="available") # available, busy, offline
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    driver = relationship("User")

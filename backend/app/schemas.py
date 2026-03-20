@@ -59,3 +59,35 @@ class Booking(BookingBase):
 
     class Config:
         from_attributes = True
+
+class MessageBase(BaseModel):
+    receiver_id: int
+    content: str
+
+class MessageCreate(MessageBase):
+    pass
+
+class Message(MessageBase):
+    id: int
+    sender_id: int
+    timestamp: datetime
+    is_read: bool
+
+    class Config:
+        from_attributes = True
+
+class TaxiLocationBase(BaseModel):
+    latitude: float
+    longitude: float
+    status: Optional[str] = "available"
+
+class TaxiLocationUpdate(TaxiLocationBase):
+    pass
+
+class TaxiLocation(TaxiLocationBase):
+    id: int
+    driver_id: int
+    updated_at: datetime
+
+    class Config:
+        from_attributes = True
