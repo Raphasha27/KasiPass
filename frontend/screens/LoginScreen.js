@@ -17,6 +17,11 @@ export default function LoginScreen() {
   const [loading, setLoading] = useState(false);
   const slideAnim = useRef(new Animated.Value(0)).current;
 
+  const handleTestLogin = () => {
+    setEmail('thabo@kasipass.co.za');
+    setPassword('thabo123');
+  };
+
   const switchMode = (m) => {
     setMode(m);
     Animated.spring(slideAnim, {
@@ -78,13 +83,18 @@ export default function LoginScreen() {
               {/* Tab Toggle */}
               <View style={styles.tabToggle}>
                 <Animated.View style={[styles.tabIndicator, { left: indicatorLeft }]} />
-                <TouchableOpacity style={styles.tabBtn} onPress={() => switchMode('login')}>
+                <TouchableOpacity style={styles.tabBtn} onPress={() => { switchMode('login'); handleTestLogin(); }}>
                   <Text style={[styles.tabBtnText, mode === 'login' && styles.tabActiveText]}>Sign In</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.tabBtn} onPress={() => switchMode('register')}>
                   <Text style={[styles.tabBtnText, mode === 'register' && styles.tabActiveText]}>New Account</Text>
                 </TouchableOpacity>
               </View>
+
+              {/* Quick Test Option */}
+              <TouchableOpacity style={styles.testBadge} onPress={handleTestLogin}>
+                 <Text style={styles.testBadgeText}>🚀 CLICK FOR TEST CREDENTIALS</Text>
+              </TouchableOpacity>
 
               {/* Inputs */}
               <View style={styles.inputStack}>
@@ -187,5 +197,7 @@ const styles = StyleSheet.create({
   input: { flex: 1, marginLeft: 12, color: 'white', fontSize: 16, fontWeight: '600' },
   submitBtn: { backgroundColor: '#00A86B', height: 65, borderRadius: 25, alignItems: 'center', justifyContent: 'center', shadowColor: '#00A86B', shadowOpacity: 0.3, shadowRadius: 15, elevation: 10 },
   submitBtnText: { color: 'white', fontSize: 18, fontWeight: 'bold', letterSpacing: 0.5 },
-  versionText: { textAlign: 'center', color: '#444', fontSize: 11, marginTop: 40, lineHeight: 18, fontWeight: 'bold' }
+  versionText: { textAlign: 'center', color: '#444', fontSize: 11, marginTop: 40, lineHeight: 18, fontWeight: 'bold' },
+  testBadge: { alignSelf: 'center', backgroundColor: '#FFFFFF08', paddingHorizontal: 16, paddingVertical: 8, borderRadius: 12, marginBottom: 25, borderWidth: 1, borderColor: '#FFFFFF15' },
+  testBadgeText: { color: '#00A86B', fontSize: 10, fontWeight: '900', letterSpacing: 1.5 },
 });

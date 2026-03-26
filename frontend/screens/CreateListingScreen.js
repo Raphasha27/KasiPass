@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView, Alert, ActivityIndicator } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, Alert, ActivityIndicator, StyleSheet, Dimensions } from 'react-native';
 import { Ionicons as Icon } from '@expo/vector-icons';
 import api from '../services/api';
+import { LinearGradient } from 'expo-linear-gradient';
+
+const { width } = Dimensions.get('window');
 
 export default function CreateListingScreen({ navigation }) {
   const [title, setTitle] = useState('');
@@ -42,61 +45,74 @@ export default function CreateListingScreen({ navigation }) {
   };
 
   return (
-    <View className="flex-1 bg-background">
-      <View className="pt-16 pb-6 px-6 bg-white border-b border-gray-100 flex-row items-center">
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Icon name="close" size={28} />
+    <View style={styles.container}>
+      {/* Header */}
+      <View style={styles.header}>
+        <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()}>
+          <Icon name="close" size={24} color="white" />
         </TouchableOpacity>
-        <Text className="text-2xl font-bold ml-4">Create Listing</Text>
+        <Text style={styles.headerTitle}>New Listing</Text>
       </View>
 
-      <ScrollView className="p-6">
-        <Text className="text-gray-500 font-bold mb-2">TITLE</Text>
-        <TextInput 
-          className="bg-white p-4 rounded-2xl mb-4 border border-gray-200"
-          placeholder="e.g. Ama-Piano Weekend"
-          value={title}
-          onChangeText={setTitle}
-        />
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: 24, paddingBottom: 100 }}>
+        
+        <Text style={styles.label}>LISTING TITLE</Text>
+        <View style={styles.inputWrapper}>
+          <TextInput 
+            style={styles.input}
+            placeholder="e.g. Ama-Piano Weekend Atteridgeville"
+            placeholderTextColor="#444"
+            value={title}
+            onChangeText={setTitle}
+          />
+        </View>
 
-        <Text className="text-gray-500 font-bold mb-2">DESCRIPTION</Text>
-        <TextInput 
-          className="bg-white p-4 rounded-2xl mb-4 border border-gray-200"
-          placeholder="What are you offering?"
-          multiline
-          numberOfLines={4}
-          value={description}
-          onChangeText={setDescription}
-        />
+        <Text style={styles.label}>DESCRIPTION</Text>
+        <View style={[styles.inputWrapper, { height: 120, alignItems: 'flex-start', paddingTop: 16 }]}>
+          <TextInput 
+            style={[styles.input, { height: '100%', textAlignVertical: 'top' }]}
+            placeholder="Describe your offer..."
+            placeholderTextColor="#444"
+            multiline
+            value={description}
+            onChangeText={setDescription}
+          />
+        </View>
 
-        <View className="flex-row justify-between">
-          <View className="w-[48%]">
-            <Text className="text-gray-500 font-bold mb-2">PRICE (R)</Text>
-            <TextInput 
-              className="bg-white p-4 rounded-2xl mb-4 border border-gray-200"
-              placeholder="50.00"
-              keyboardType="numeric"
-              value={price}
-              onChangeText={setPrice}
-            />
+        <View style={styles.row}>
+          <View style={{ width: '48%' }}>
+            <Text style={styles.label}>PRICE (R)</Text>
+            <View style={styles.inputWrapper}>
+              <TextInput 
+                style={styles.input}
+                placeholder="0.00"
+                placeholderTextColor="#444"
+                keyboardType="numeric"
+                value={price}
+                onChangeText={setPrice}
+              />
+            </View>
           </View>
-          <View className="w-[48%]">
-            <Text className="text-gray-500 font-bold mb-2">LOCATION</Text>
-            <TextInput 
-              className="bg-white p-4 rounded-2xl mb-4 border border-gray-200"
-              placeholder="Orlando West"
-              value={location}
-              onChangeText={setLocation}
-            />
+          <View style={{ width: '48%' }}>
+            <Text style={styles.label}>LOCATION</Text>
+            <View style={styles.inputWrapper}>
+              <TextInput 
+                style={styles.input}
+                placeholder="Section D"
+                placeholderTextColor="#444"
+                value={location}
+                onChangeText={setLocation}
+              />
+            </View>
           </View>
         </View>
 
-        <Text className="text-gray-500 font-bold mb-2">CATEGORY</Text>
-        <View className="flex-row flex-wrap mb-4">
+        <Text style={styles.label}>CATEGORY</Text>
+        <View style={styles.categoryRow}>
           {categories.map(cat => (
             <TouchableOpacity 
               key={cat} 
-              className={`mr-2 mb-2 px-4 py-2 rounded-full border ${category === cat ? 'bg-primary border-primary' : 'bg-white border-gray-200'}`}
+              style={[styles.catChip, category === cat && styles.catActive]}
               onPress={() => {
                 setCategory(cat);
                 if (cat === 'Events') setType('event');
@@ -104,21 +120,38 @@ export default function CreateListingScreen({ navigation }) {
                 else setType('service');
               }}
             >
-              <Text className={category === cat ? 'text-white font-bold' : 'text-gray-500'}>{cat}</Text>
+              <Text style={[styles.catText, category === cat && styles.catActiveText]}>{cat}</Text>
             </TouchableOpacity>
           ))}
         </View>
 
         <TouchableOpacity 
-          className="bg-primary p-5 rounded-3xl items-center mt-6 shadow-lg"
+          style={[styles.submitBtn, loading && { opacity: 0.6 }]}
           onPress={handleCreate}
           disabled={loading}
         >
-          {loading ? <ActivityIndicator color="white" /> : <Text className="text-white text-xl font-bold">Launch Listing</Text>}
+          {loading ? <ActivityIndicator color="white" /> : <Text style={styles.submitText}>Launch Listing</Text>}
         </TouchableOpacity>
         
-        <View className="h-20" />
       </ScrollView>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: { flex: 1, backgroundColor: '#0A0A0A' },
+  header: { paddingTop: 60, paddingHorizontal: 24, paddingBottom: 30, flexDirection: 'row', alignItems: 'center' },
+  backBtn: { width: 45, height: 45, borderRadius: 15, backgroundColor: '#1A1A1A', alignItems: 'center', justifyContent: 'center' },
+  headerTitle: { color: 'white', fontSize: 24, fontWeight: '900', marginLeft: 20 },
+  label: { color: '#444', fontSize: 11, fontWeight: '900', letterSpacing: 1.5, marginBottom: 12, marginTop: 10 },
+  inputWrapper: { backgroundColor: '#111', height: 65, borderRadius: 20, paddingHorizontal: 20, justifyContent: 'center', marginBottom: 20, borderWidth: 1, borderColor: '#FFFFFF05' },
+  input: { color: 'white', fontSize: 16, fontWeight: '600' },
+  row: { flexDirection: 'row', justifyContent: 'space-between' },
+  categoryRow: { flexDirection: 'row', flexWrap: 'wrap', marginBottom: 20 },
+  catChip: { backgroundColor: '#1A1A1A', paddingHorizontal: 16, paddingVertical: 10, borderRadius: 15, marginRight: 10, marginBottom: 10, borderWidth: 1, borderColor: '#FFFFFF05' },
+  catActive: { backgroundColor: '#00A86B20', borderColor: '#00A86B80' },
+  catText: { color: '#8E8E93', fontWeight: 'bold', fontSize: 13 },
+  catActiveText: { color: 'white' },
+  submitBtn: { backgroundColor: '#00A86B', height: 70, borderRadius: 25, alignItems: 'center', justifyContent: 'center', marginTop: 30, shadowColor: '#00A86B', shadowOpacity: 0.3, shadowRadius: 20, elevation: 15 },
+  submitText: { color: 'white', fontSize: 18, fontWeight: 'bold' }
+});

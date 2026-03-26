@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Image, ActivityIndicator } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, Image, ActivityIndicator, StyleSheet, Dimensions } from 'react-native';
 import { Ionicons as Icon } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+
+const { width } = Dimensions.get('window');
 
 export default function OrderScreen({ navigation, route }) {
   const { restaurant } = route.params;
@@ -18,14 +21,14 @@ export default function OrderScreen({ navigation, route }) {
         if (prev >= 0.6) setStatus('out-for-delivery');
         return prev + 0.1;
       });
-    }, 3000);
+    }, 4000);
     return () => clearInterval(timer);
   }, []);
 
   const getStatusInfo = () => {
     switch(status) {
-      case 'preparing': return { icon: 'fast-food-outline', text: 'Preparing your meal...', color: '#FFD700' };
-      case 'out-for-delivery': return { icon: 'bicycle-outline', text: 'Driver is on the way!', color: '#00A86B' };
+      case 'preparing': return { icon: 'fast-food-outline', text: 'Preparing meal...', color: '#FDCC0D' };
+      case 'out-for-delivery': return { icon: 'bicycle-outline', text: 'Driver on way!', color: '#00A86B' };
       case 'delivered': return { icon: 'home-outline', text: 'Delivered. Enjoy!', color: '#00A86B' };
       default: return { icon: 'time-outline', text: 'Waiting...', color: 'gray' };
     }
@@ -34,52 +37,78 @@ export default function OrderScreen({ navigation, route }) {
   const info = getStatusInfo();
 
   return (
-    <View className="flex-1 bg-background">
-      <View className="pt-16 pb-6 px-6 bg-white border-b border-gray-100 flex-row items-center">
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Icon name="chevron-back" size={28} />
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()}>
+          <Icon name="chevron-back" size={24} color="white" />
         </TouchableOpacity>
-        <Text className="text-2xl font-bold ml-4">Order Status</Text>
+        <Text style={styles.headerTitle}>Order Status</Text>
       </View>
 
-      <ScrollView className="p-6">
-        <View className="bg-white p-8 rounded-[40px] items-center shadow-sm">
-          <View className="w-24 h-24 bg-gray-100 rounded-full items-center justify-center mb-6">
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: 24, paddingBottom: 100 }}>
+        
+        {/* Status Card */}
+        <View style={styles.statusCard}>
+          <View style={[styles.statusIconCircle, { borderColor: info.color + '30' }]}>
             <Icon name={info.icon} size={48} color={info.color} />
           </View>
-          <Text className="text-2xl font-bold text-center">{info.text}</Text>
-          <Text className="text-gray-500 mt-2 text-center">Order #KP-992 from {restaurant.name}</Text>
+          <Text style={styles.statusText}>{info.text}</Text>
+          <Text style={styles.orderNumber}>ORDER #KP-992 from {restaurant.name}</Text>
           
-          <View className="w-full h-3 bg-gray-100 rounded-full mt-8 overflow-hidden">
-            <View className="h-full bg-primary" style={{ width: `${progress * 100}%` }} />
+          <View style={styles.progressContainer}>
+            <View style={[styles.progressBar, { width: `${progress * 100}%` }]} />
           </View>
         </View>
 
-        <View className="mt-8 bg-black p-6 rounded-[40px] flex-row items-center shadow-lg shadow-black/40">
+        {/* Driver Section */}
+        <View style={styles.driverCard}>
           <Image 
-            source={{ uri: 'https://images.unsplash.com/photo-1533107862482-0e6974b06ec4?q=80&w=200' }} 
-            className="w-16 h-16 rounded-2xl" 
+            source={{ uri: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=200' }} 
+            style={styles.driverImage} 
           />
-          <View className="ml-4 flex-1">
-            <Text className="text-white text-lg font-bold">Your Driver: Sipho</Text>
-            <Text className="text-gray-400">Arriving in approx. {status === 'delivered' ? '0' : '12'} mins</Text>
+          <View style={styles.driverMeta}>
+            <Text style={styles.driverName}>Rider: Sipho</Text>
+            <Text style={styles.driverTime}>ETA: {status === 'delivered' ? '0' : '8'} mins</Text>
           </View>
-          <TouchableOpacity className="bg-primary p-3 rounded-full">
+          <TouchableOpacity style={styles.callBtn}>
             <Icon name="call" size={24} color="white" />
           </TouchableOpacity>
         </View>
 
-        <TouchableOpacity className="mt-8 bg-white p-6 rounded-[40px] items-center border-2 border-dashed border-gray-200" onPress={() => navigation.navigate('Chat')}>
-          <Text className="text-gray-500 font-bold">Need help with your order? Chat with us.</Text>
+        <TouchableOpacity style={styles.helpBtn} onPress={() => navigation.navigate('Chat')}>
+          <Text style={styles.helpBtnText}>Chat with Support / Rider</Text>
         </TouchableOpacity>
         
         <TouchableOpacity 
-          className="mt-8 bg-primary/10 p-5 rounded-3xl items-center border border-primary"
+          style={styles.homeBtn}
           onPress={() => navigation.navigate('Home')}
         >
-          <Text className="text-primary font-bold">Back to Home</Text>
+          <Text style={styles.homeBtnText}>Back to Dashboard</Text>
         </TouchableOpacity>
       </ScrollView>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: { flex: 1, backgroundColor: '#0A0A0A' },
+  header: { paddingTop: 60, paddingHorizontal: 24, paddingBottom: 25, flexDirection: 'row', alignItems: 'center' },
+  backBtn: { width: 45, height: 45, borderRadius: 15, backgroundColor: '#1A1A1A', alignItems: 'center', justifyContent: 'center' },
+  headerTitle: { color: 'white', fontSize: 24, fontWeight: '900', marginLeft: 20 },
+  statusCard: { backgroundColor: '#111', borderRadius: 40, padding: 35, alignItems: 'center', borderWeight: 1, borderColor: '#FFFFFF05' },
+  statusIconCircle: { width: 100, height: 100, borderRadius: 50, backgroundColor: '#1A1A1A', alignItems: 'center', justifyContent: 'center', marginBottom: 20, borderWidth: 1 },
+  statusText: { color: 'white', fontSize: 24, fontWeight: '900', textAlign: 'center' },
+  orderNumber: { color: '#8E8E93', fontSize: 13, marginTop: 10, fontWeight: 'bold' },
+  progressContainer: { width: '100%', height: 6, backgroundColor: '#1A1A1A', borderRadius: 10, marginTop: 40, overflow: 'hidden' },
+  progressBar: { height: '100%', backgroundColor: '#00A86B' },
+  driverCard: { backgroundColor: '#1A1A1A', marginTop: 30, padding: 20, borderRadius: 30, flexDirection: 'row', alignItems: 'center', borderWeight: 1, borderColor: '#FFFFFF05' },
+  driverImage: { width: 60, height: 60, borderRadius: 20 },
+  driverMeta: { flex: 1, marginLeft: 16 },
+  driverName: { color: 'white', fontSize: 17, fontWeight: 'bold' },
+  driverTime: { color: '#FDCC0D', fontSize: 12, marginTop: 4, fontWeight: 'bold' },
+  callBtn: { width: 50, height: 50, borderRadius: 25, backgroundColor: '#00A86B', alignItems: 'center', justifyContent: 'center' },
+  helpBtn: { marginTop: 30, backgroundColor: '#111', padding: 24, borderRadius: 30, alignItems: 'center', borderWidth: 1, borderColor: '#FFFFFF05' },
+  helpBtnText: { color: '#8E8E93', fontWeight: 'bold', fontSize: 14 },
+  homeBtn: { marginTop: 20, backgroundColor: '#00A86B15', padding: 24, borderRadius: 30, alignItems: 'center', borderWidth: 1, borderColor: '#00A86B30' },
+  homeBtnText: { color: '#00A86B', fontWeight: '900', fontSize: 14, textTransform: 'uppercase' }
+});

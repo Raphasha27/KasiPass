@@ -42,3 +42,8 @@ async def login_for_access_token(db: Session = Depends(database.get_db), form_da
 @router.get("/me", response_model=schemas.User)
 async def read_users_me(current_user: models.User = Depends(auth.get_current_user)):
     return current_user
+
+@router.get("/", response_model=list[schemas.User])
+def get_all_users(db: Session = Depends(database.get_db), current_user: models.User = Depends(auth.get_current_user)):
+    # Simple discovery: get other users to chat with
+    return db.query(models.User).filter(models.User.id != current_user.id).all()

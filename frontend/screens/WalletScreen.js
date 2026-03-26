@@ -29,7 +29,7 @@ export default function WalletScreen() {
            <Text style={styles.balanceAmount}>R{balance.toLocaleString()}</Text>
            <View style={styles.balanceFooter}>
               <Text style={styles.cardNumber}>**** **** **** 4250</Text>
-              <Icon name="logo-mastercard" size={32} color="white" />
+              <Icon name="card-outline" size={32} color="white" />
            </View>
         </LinearGradient>
 
@@ -76,7 +76,7 @@ export default function WalletScreen() {
 
         {/* Recent Transactions Section */}
         <Text style={styles.sectionTitleAlt}>Recent Transactions</Text>
-        <View style={styles.transactionList}>
+        <div style={styles.transactionList}>
            {transactions.map(item => (
              <TouchableOpacity key={item.id} style={styles.transactionItem}>
                 <View style={[styles.iconBox, { backgroundColor: item.color + '15' }]}>
@@ -89,7 +89,7 @@ export default function WalletScreen() {
                 <Text style={styles.transAmount}>{item.amount}</Text>
              </TouchableOpacity>
            ))}
-        </View>
+        </div>
 
       </ScrollView>
     </View>
@@ -97,10 +97,10 @@ export default function WalletScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#FFFFFF' },
+  container: { flex: 1, backgroundColor: '#0A0A0A' },
   header: { paddingHorizontal: 24, paddingTop: 60, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 },
-  headerTitle: { fontSize: 24, fontWeight: '900', color: '#1A1A1A' },
-  logoText: { fontSize: 18, fontWeight: 'bold', color: '#1A1A1A' },
+  headerTitle: { fontSize: 24, fontWeight: '900', color: 'white' },
+  logoText: { fontSize: 18, fontWeight: 'bold', color: 'white' },
   balanceCard: { marginHorizontal: 24, height: 160, borderRadius: 30, padding: 24, justifyContent: 'space-between', shadowColor: '#00A86B', shadowOffset: { width: 0, height: 10 }, shadowOpacity: 0.3, shadowRadius: 20, elevation: 15 },
   balanceLabel: { color: '#E0E0E0', fontSize: 14, fontWeight: '600' },
   balanceAmount: { color: 'white', fontSize: 32, fontWeight: '900' },
@@ -120,15 +120,15 @@ const styles = StyleSheet.create({
   qrText: { fontSize: 8, fontWeight: 'bold', color: 'black', marginTop: -5 },
   transactionId: { color: '#666', fontSize: 9, marginTop: 12, fontWeight: 'bold' },
   sectionHeader: { marginHorizontal: 24, marginTop: 35, flexDirection: 'row', alignItems: 'center' },
-  sectionTitle: { fontSize: 18, fontWeight: 'bold', color: '#1C1C1E' },
-  badge: { backgroundColor: '#F2F2F7', width: 24, height: 24, borderRadius: 12, alignItems: 'center', justifyContent: 'center', marginLeft: 10 },
-  badgeText: { fontSize: 12, fontWeight: 'bold', color: '#1C1C1E' },
+  sectionTitle: { fontSize: 18, fontWeight: 'bold', color: 'white' },
+  badge: { backgroundColor: '#1A1A1A', width: 24, height: 24, borderRadius: 12, alignItems: 'center', justifyContent: 'center', marginLeft: 10 },
+  badgeText: { fontSize: 12, fontWeight: 'bold', color: 'white' },
   sectionTitleAlt: { marginHorizontal: 24, marginTop: 25, fontSize: 16, fontWeight: 'bold', color: '#8E8E93' },
   transactionList: { marginHorizontal: 24, marginTop: 15 },
   transactionItem: { flexDirection: 'row', alignItems: 'center', marginBottom: 20 },
   iconBox: { width: 44, height: 44, borderRadius: 15, alignItems: 'center', justifyContent: 'center' },
   transInfo: { flex: 1, marginLeft: 15 },
-  transName: { fontSize: 15, fontWeight: 'bold', color: '#1C1C1E' },
+  transName: { fontSize: 15, fontWeight: 'bold', color: 'white' },
   transDesc: { fontSize: 12, color: '#8E8E93', marginTop: 2 },
-  transAmount: { fontSize: 15, fontWeight: 'bold', color: '#1C1C1E' }
+  transAmount: { fontSize: 15, fontWeight: 'bold', color: 'white' }
 });

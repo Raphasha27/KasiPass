@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Animated, Image, ActivityIndicator, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, Animated, Image, ActivityIndicator, Alert, StyleSheet, Dimensions } from 'react-native';
 import { Ionicons as Icon } from '@expo/vector-icons';
 import api from '../services/api';
+import { LinearGradient } from 'expo-linear-gradient';
 
-const ATTERIDGEVILLE_COORDS = { lat: -25.77, lon: 28.08 };
+const { width, height } = Dimensions.get('window');
 
 export default function TaxiTrackingScreen({ navigation }) {
   const [taxis, setTaxis] = useState([]);
@@ -18,8 +19,8 @@ export default function TaxiTrackingScreen({ navigation }) {
     // Pulse animation for the focus area
     Animated.loop(
       Animated.sequence([
-        Animated.timing(pulseAnim, { toValue: 1.2, duration: 1000, useNativeDriver: true }),
-        Animated.timing(pulseAnim, { toValue: 1, duration: 1000, useNativeDriver: true })
+        Animated.timing(pulseAnim, { toValue: 1.2, duration: 2000, useNativeDriver: true }),
+        Animated.timing(pulseAnim, { toValue: 1, duration: 2000, useNativeDriver: true })
       ])
     ).start();
 
@@ -47,64 +48,64 @@ export default function TaxiTrackingScreen({ navigation }) {
   };
 
   return (
-    <View className="flex-1 bg-[#121212]">
+    <View style={styles.container}>
       {/* Simulation Map Placeholder */}
-      <View className="flex-1 items-center justify-center p-6 bg-black">
+      <View style={styles.mapContainer}>
         <Image 
           source={{ uri: 'https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?q=80&w=1000' }} 
-          className="absolute inset-0 opacity-40 grayscale"
+          style={styles.mapImage}
         />
         
-        {/* Atteridgeville Focus Circle */}
+        <View style={styles.overlay} />
+
+        {/* Radar Effect */}
         <Animated.View 
-          className="w-80 h-80 rounded-full border-4 border-primary/20 items-center justify-center"
-          style={{ transform: [{ scale: pulseAnim }] }}
-        >
-          <View className="w-10 h-10 bg-primary rounded-full items-center justify-center shadow-lg shadow-primary">
-             <Icon name="navigate" size={24} color="white" />
-          </View>
-        </Animated.View>
-
-        <View className="absolute top-20 left-10 p-4 bg-white/10 rounded-2xl border border-white/20 backdrop-blur-md">
-            <Text className="text-white font-black text-2xl uppercase tracking-widest">Focus Area</Text>
-            <Text className="text-primary font-bold">Atteridgeville (NW)</Text>
-            <Text className="text-gray-400 text-[10px] mt-1 italic">TomTom Data Overlay Active</Text>
+          style={[styles.radarCircle, { transform: [{ scale: pulseAnim }] }]}
+        />
+        <View style={styles.userMarker}>
+           <Icon name="navigate" size={24} color="white" />
         </View>
 
-        {/* Simulated Markers */}
-        <View className="absolute top-1/2 left-1/3 bg-white p-2 rounded-xl flex-row items-center">
-            <Icon name="bus" size={20} color="#00A86B" />
-            <Text className="ml-2 font-bold text-xs">Sipho (2m away)</Text>
+        <View style={styles.focusLabel}>
+            <Text style={styles.focusTitle}>TRACKING HUB</Text>
+            <Text style={styles.focusArea}>Atteridgeville (NW)</Text>
+            <Text style={styles.focusSub}>TomTom Data Active</Text>
         </View>
-        <View className="absolute bottom-1/4 right-1/4 bg-white p-2 rounded-xl flex-row items-center">
-            <Icon name="bus" size={20} color="#00A86B" />
-            <Text className="ml-2 font-bold text-xs">Kabelo (8m away)</Text>
+
+        {/* Simulated Taxis */}
+        <View style={[styles.taxiMarker, { top: '45%', left: '25%' }]}>
+            <Icon name="bus" size={18} color="#00A86B" />
+            <Text style={styles.taxiText}>Sipho (2m)</Text>
+        </View>
+        <View style={[styles.taxiMarker, { bottom: '30%', right: '20%' }]}>
+            <Icon name="bus" size={18} color="#00A86B" />
+            <Text style={styles.taxiText}>Kabelo (8m)</Text>
         </View>
       </View>
 
-      {/* Floating Panel */}
-      <View className="bg-white rounded-t-[50px] p-8 -mt-10 h-1/3 shadow-2xl">
-        <View className="w-12 h-1.5 bg-gray-200 rounded-full mb-6 mx-auto" />
-        <Text className="text-3xl font-black italic uppercase tracking-tighter">Your <Text className="text-primary">Kasi</Text> Ride</Text>
-        <Text className="text-gray-500 mt-2">Available taxis in Atteridgeville right now.</Text>
+      {/* Floating Control Panel */}
+      <View style={styles.panel}>
+        <View style={styles.pullBar} />
+        <Text style={styles.panelTitle}>Your <Text style={{color: '#00A86B'}}>Kasi</Text> Ride</Text>
+        <Text style={styles.panelSubtitle}>2 available taxis in Atteridgeville right now.</Text>
         
-        <View className="mt-8 flex-row justify-between items-center bg-gray-100 p-6 rounded-3xl">
+        <View style={styles.requestCard}>
             <View>
-                <Text className="font-bold text-lg">Standard Commute</Text>
-                <Text className="text-gray-400">Fixed R25 Route rate</Text>
+                <Text style={styles.rateTitle}>Standard Route</Text>
+                <Text style={styles.rateValue}>Fixed R25 Flat Rate</Text>
             </View>
             <TouchableOpacity 
-                className={`bg-primary px-8 py-4 rounded-2xl shadow-lg shadow-primary ${requesting ? 'opacity-50' : ''}`}
+                style={[styles.requestBtn, requesting && { opacity: 0.6 }]}
                 onPress={handleRequest}
                 disabled={requesting}
             >
-                {requesting ? <ActivityIndicator color="white" /> : <Text className="text-white font-black uppercase">Request now</Text>}
+                {requesting ? <ActivityIndicator color="white" /> : <Text style={styles.requestBtnText}>Request</Text>}
             </TouchableOpacity>
         </View>
       </View>
 
       <TouchableOpacity 
-        className="absolute top-12 left-6 p-4 bg-black/60 rounded-full"
+        style={styles.backBtn}
         onPress={() => navigation.goBack()}
       >
         <Icon name="chevron-back" size={24} color="white" />
@@ -112,3 +113,28 @@ export default function TaxiTrackingScreen({ navigation }) {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: { flex: 1, backgroundColor: '#000' },
+  mapContainer: { flex: 1, alignItems: 'center', justifyContent: 'center' },
+  mapImage: { ...StyleSheet.absoluteFillObject, opacity: 0.3 },
+  overlay: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(0,0,0,0.6)' },
+  radarCircle: { width: 300, height: 300, borderRadius: 150, borderWeight: 1, borderColor: '#00A86B30' },
+  userMarker: { position: 'absolute', width: 50, height: 50, backgroundColor: '#00A86B', borderRadius: 25, alignItems: 'center', justifyContent: 'center', shadowColor: '#00A86B', shadowOpacity: 0.5, shadowRadius: 15, elevation: 15 },
+  focusLabel: { position: 'absolute', top: 70, left: 24, backgroundColor: 'rgba(255,255,255,0.05)', padding: 16, borderRadius: 20, borderWidth: 1, borderColor: '#FFFFFF10' },
+  focusTitle: { color: 'white', fontSize: 18, fontWeight: '900', letterSpacing: 2 },
+  focusArea: { color: '#00A86B', fontSize: 13, fontWeight: 'bold', marginTop: 2 },
+  focusSub: { color: '#444', fontSize: 9, marginTop: 6, fontWeight: 'bold' },
+  taxiMarker: { position: 'absolute', backgroundColor: 'white', paddingHorizontal: 10, paddingVertical: 6, borderRadius: 12, flexDirection: 'row', alignItems: 'center', shadowColor: '#000', shadowOpacity: 0.2, shadowRadius: 5 },
+  taxiText: { color: '#000', fontSize: 10, fontWeight: 'bold', marginLeft: 6 },
+  panel: { backgroundColor: '#111', height: height * 0.35, borderTopLeftRadius: 40, borderTopRightRadius: 40, padding: 30, marginTop: -40, borderWidth: 1, borderColor: '#FFFFFF05' },
+  pullBar: { width: 40, height: 5, backgroundColor: '#222', borderRadius: 10, alignSelf: 'center', marginBottom: 20 },
+  panelTitle: { color: 'white', fontSize: 26, fontWeight: '900', letterSpacing: -0.5 },
+  panelSubtitle: { color: '#8E8E93', fontSize: 14, marginTop: 4, fontWeight: '500' },
+  requestCard: { backgroundColor: '#1A1A1A', marginTop: 30, padding: 20, borderRadius: 25, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderWeight: 1, borderColor: '#FFFFFF05' },
+  rateTitle: { color: 'white', fontSize: 16, fontWeight: 'bold' },
+  rateValue: { color: '#8E8E93', fontSize: 12, marginTop: 4, fontWeight: '600' },
+  requestBtn: { backgroundColor: '#00A86B', paddingHorizontal: 24, paddingVertical: 14, borderRadius: 16, shadowColor: '#00A86B', shadowOpacity: 0.3, shadowRadius: 10, elevation: 5 },
+  requestBtnText: { color: 'white', fontWeight: 'bold', fontSize: 14, textTransform: 'uppercase' },
+  backBtn: { position: 'absolute', top: 60, left: 24, width: 45, height: 45, borderRadius: 15, backgroundColor: 'rgba(0,0,0,0.5)', alignItems: 'center', justifyContent: 'center' }
+});

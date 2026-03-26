@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, Image, ActivityIndicator, StyleSheet } from 'react-native';
 import { Ionicons as Icon } from '@expo/vector-icons';
 import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
@@ -15,17 +15,8 @@ export default function ChatScreen({ navigation }) {
 
   const fetchUsers = async () => {
     try {
-      // In a real app, we'd fetch actual active conversations.
-      // For now, we'll fetch all users except current user.
-      const res = await api.get('/users/profile'); // Mocking conversation discovery
-      // Actually, let's just fetch all listings and their owners to simulate business chat
-      const lRes = await api.get('/listings/');
-      const owners = lRes.data.map(l => l.owner).filter(o => o && o.id !== user?.id);
-      // Remove duplicates
-      const uniqueOwners = Array.from(new Set(owners.map(o => o.id)))
-        .map(id => owners.find(o => o.id === id));
-      
-      setUsers(uniqueOwners);
+      const res = await api.get('/users/');
+      setUsers(res.data);
     } catch (err) {
       console.error("Failed to fetch chat users", err);
     } finally {
@@ -35,49 +26,52 @@ export default function ChatScreen({ navigation }) {
 
   const renderItem = ({ item }) => (
     <TouchableOpacity 
-      className="flex-row bg-white p-6 border-b border-gray-50 items-center"
+      style={styles.chatRow}
       onPress={() => navigation.navigate('Conversation', { otherUser: item })}
     >
-      <View>
+      <View style={styles.avatarContainer}>
         <Image 
-          source={{ uri: `https://images.unsplash.com/photo-15${item.id+30}00000000?q=80&w=100` }} 
-          className="w-16 h-16 rounded-full" 
+          source={{ uri: `https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=100` }} 
+          style={styles.avatar}
         />
-        <View className="absolute bottom-0 right-0 w-5 h-5 bg-green-500 rounded-full border-2 border-white" />
+        <View style={styles.onlineStatus} />
       </View>
-      <View className="ml-4 flex-1">
-        <View className="flex-row justify-between">
-          <Text className="text-xl font-bold">{item.full_name}</Text>
-          <Text className="text-gray-400">Now</Text>
+      <View style={styles.chatInfo}>
+        <View style={styles.chatHeader}>
+          <Text style={styles.chatName}>{item.full_name}</Text>
+          <Text style={styles.chatTime}>Now</Text>
         </View>
-        <Text className="text-gray-500 mt-1 font-medium" numberOfLines={1}>Tap to start community chat</Text>
+        <Text style={styles.chatPreview} numberOfLines={1}>Tap to start community chat</Text>
       </View>
-      <Icon name="chevron-forward" size={20} color="#E5E7EB" />
+      <Icon name="chevron-forward" size={18} color="#1A1A1A" />
     </TouchableOpacity>
   );
 
   return (
-    <View className="flex-1 bg-background">
-      <View className="pt-16 pb-6 px-6 bg-white border-b border-gray-100 flex-row justify-between items-center">
-        <Text className="text-3xl font-black italic uppercase italic tracking-tighter">Messages</Text>
-        <TouchableOpacity onPress={fetchUsers}>
-          <Icon name="refresh" size={24} />
+    <View style={styles.container}>
+      {/* Header */}
+      <View style={styles.header}>
+        <Text style={styles.headerTitle}>Messages</Text>
+        <TouchableOpacity style={styles.refreshBtn} onPress={fetchUsers}>
+          <Icon name="refresh-outline" size={24} color="white" />
         </TouchableOpacity>
       </View>
 
       {loading ? (
-        <View className="flex-1 justify-center items-center">
-          <ActivityIndicator color="#00A86B" />
+        <View style={styles.centerBox}>
+          <ActivityIndicator color="#00A86B" size="large" />
         </View>
       ) : (
         <FlatList
           data={users}
           keyExtractor={item => item.id.toString()}
           renderItem={renderItem}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingHorizontal: 24, paddingBottom: 120 }}
           ListEmptyComponent={
-            <View className="items-center mt-20 p-10">
-              <Icon name="chatbubbles-outline" size={64} color="#E5E7EB" />
-              <Text className="text-gray-400 mt-4 text-center text-lg">No active chats. Contact a vendor from the Explore screen!</Text>
+            <View style={styles.centerBox}>
+              <Icon name="chatbubbles-outline" size={64} color="#111" />
+              <Text style={styles.emptyText}>No active chats. Reach out to the community!</Text>
             </View>
           }
         />
@@ -85,3 +79,21 @@ export default function ChatScreen({ navigation }) {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: { flex: 1, backgroundColor: '#0A0A0A' },
+  header: { paddingTop: 60, paddingHorizontal: 24, paddingBottom: 25, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  headerTitle: { color: 'white', fontSize: 28, fontWeight: '900' },
+  refreshBtn: { width: 45, height: 45, borderRadius: 15, backgroundColor: '#1A1A1A', alignItems: 'center', justifyContent: 'center' },
+  centerBox: { flex: 1, justifyContent: 'center', alignItems: 'center', marginTop: 100 },
+  chatRow: { flexDirection: 'row', backgroundColor: '#111', padding: 16, borderRadius: 25, marginBottom: 15, alignItems: 'center', borderWidth: 1, borderColor: '#FFFFFF05' },
+  avatarContainer: { position: 'relative' },
+  avatar: { width: 60, height: 60, borderRadius: 30 },
+  onlineStatus: { position: 'absolute', bottom: 2, right: 2, width: 14, height: 14, borderRadius: 7, backgroundColor: '#00A86B', borderWeight: 2, borderColor: '#111' },
+  chatInfo: { flex: 1, marginLeft: 16 },
+  chatHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  chatName: { color: 'white', fontSize: 17, fontWeight: 'bold' },
+  chatTime: { color: '#444', fontSize: 11, fontWeight: 'bold' },
+  chatPreview: { color: '#8E8E93', fontSize: 13, marginTop: 4, fontWeight: '500' },
+  emptyText: { color: '#333', fontSize: 15, fontWeight: 'bold', marginTop: 20, textAlign: 'center' }
+});
