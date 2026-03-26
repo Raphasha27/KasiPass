@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Image, Switch, StyleSheet } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Image, Switch, StyleSheet, Dimensions } from 'react-native';
 import { Ionicons as Icon } from '@expo/vector-icons';
 import { useAuth } from '../context/AuthContext';
 import { LinearGradient } from 'expo-linear-gradient';
+
+const { width } = Dimensions.get('window');
 
 export default function ProfileScreen({ navigation }) {
   const { user, logout } = useAuth();
@@ -15,67 +17,104 @@ export default function ProfileScreen({ navigation }) {
     { title: 'Support', icon: 'help-circle-outline' },
   ];
 
+  const badges = [
+    { id: '1', name: 'Founding Member', icon: 'medal', color: '#FDCC0D' },
+    { id: '2', name: 'Super Saver', icon: 'wallet', color: '#00A86B' },
+    { id: '3', name: 'Vibe Master', icon: 'flame', color: '#FF3B30' },
+  ];
+
   return (
     <View style={styles.container}>
       <LinearGradient colors={['#0A0A0A', '#1A1A1A']} style={styles.gradient}>
-        <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 100 }}>
+        <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 120 }}>
           
           <View style={styles.header}>
-            <TouchableOpacity onPress={() => navigation.goBack()}>
-              <Icon name="chevron-back" size={24} color="#8E8E93" />
+            <TouchableOpacity style={styles.roundBtn} onPress={() => navigation.goBack()}>
+              <Icon name="chevron-back" size={24} color="white" />
             </TouchableOpacity>
-            <Text style={styles.headerTitle}>Profile</Text>
-            <TouchableOpacity onPress={logout}>
-              <Icon name="log-out-outline" size={24} color="#FF3B30" />
+            <Text style={styles.headerTitle}>Account</Text>
+            <TouchableOpacity style={styles.roundBtn} onPress={logout}>
+              <Icon name="log-out-outline" size={20} color="#FF3B30" />
             </TouchableOpacity>
           </View>
 
-          <View style={styles.profileSection}>
-            <View style={styles.avatarContainer}>
+          {/* Profile Hero */}
+          <View style={styles.profileHero}>
+            <View style={styles.avatarWrap}>
               <Image 
-                source={{ uri: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200' }} 
+                source={{ uri: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=200' }} 
                 style={styles.avatar} 
               />
-              <View style={styles.badgeIcon}>
-                <Icon name="medal" size={14} color="#FDCC0D" />
-              </View>
+              <LinearGradient colors={['#FDCC0D', '#CC9900']} style={styles.levelBadge}>
+                 <Text style={styles.levelText}>Lv 12</Text>
+              </LinearGradient>
             </View>
-            
             <Text style={styles.userName}>{user?.full_name || 'Thabo Mchize'}</Text>
-            <Text style={styles.userLoc}>Soweto, GP</Text>
+            <Text style={styles.userSub}>Verified Community Resident 🇿🇦</Text>
             
-            <View style={styles.tierContainer}>
-              <Text style={styles.tierText}>Gold Member | <Text style={styles.kpText}>4,250 KP</Text></Text>
-            </View>
-            <Text style={styles.subText}>Community Member</Text>
-          </View>
-
-          <View style={styles.vendorToggleCard}>
-            <View style={styles.vendorInfo}>
-              <View style={styles.vendorIconBox}>
-                <Icon name="people-outline" size={20} color="#00A86B" />
-              </View>
-              <View style={{ flex: 1, marginLeft: 12 }}>
-                <Text style={styles.vendorTitle}>Switch to Vendor Mode</Text>
-                <Text style={styles.vendorSub}>Switch into vendor mode and manage your businesses.</Text>
-              </View>
-              <Switch 
-                value={isVendor} 
-                onValueChange={setIsVendor}
-                trackColor={{ false: '#3A3A3C', true: '#4CD964' }}
-                thumbColor={isVendor ? 'white' : '#8E8E93'}
-              />
+            <View style={styles.kpStats}>
+               <View style={styles.statBox}>
+                  <Text style={styles.statVal}>4,250</Text>
+                  <Text style={styles.statLab}>Kasi Points</Text>
+               </View>
+               <View style={styles.statDivider} />
+               <View style={styles.statBox}>
+                  <Text style={styles.statVal}>Gold</Text>
+                  <Text style={styles.statLab}>Membership</Text>
+               </View>
             </View>
           </View>
 
-          <View style={styles.menuContainer}>
+          {/* Digital Badges - NEW FEATURE */}
+          <Text style={styles.sectionLabel}>COMMUNITY ACHIEVEMENTS</Text>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.badgeScroll}>
+            {badges.map(badge => (
+              <View key={badge.id} style={styles.badgeItem}>
+                <View style={[styles.badgeCircle, { backgroundColor: badge.color + '15' }]}>
+                  <Icon name={badge.icon} size={24} color={badge.color} />
+                </View>
+                <Text style={styles.badgeName}>{badge.name}</Text>
+              </View>
+            ))}
+          </ScrollView>
+
+          {/* Business Mode Toggle */}
+          <View style={styles.vendorCard}>
+            <View style={styles.vendorHeader}>
+               <View style={styles.vendorIconWrap}>
+                 <Icon name="rocket" size={20} color="#00A86B" />
+               </View>
+               <View style={{ flex: 1, marginLeft: 15 }}>
+                  <Text style={styles.vendorTitle}>Professional Mode</Text>
+                  <Text style={styles.vendorSubText}>Manage your business and listings</Text>
+               </View>
+               <Switch 
+                 value={isVendor} 
+                 onValueChange={setIsVendor}
+                 trackColor={{ false: '#333', true: '#00A86B' }}
+                 thumbColor="white"
+               />
+            </View>
+            {isVendor && (
+              <TouchableOpacity 
+                style={styles.dashBtn}
+                onPress={() => navigation.navigate('VendorDashboard')}
+              >
+                <Text style={styles.dashBtnText}>Go to Dashboard</Text>
+                <Icon name="arrow-forward" size={16} color="white" />
+              </TouchableOpacity>
+            )}
+          </View>
+
+          {/* Menu Items */}
+          <View style={styles.menuList}>
              {menuItems.map((item, idx) => (
-                <TouchableOpacity key={idx} style={styles.menuItem}>
-                   <View style={styles.menuIconWrap}>
+                <TouchableOpacity key={idx} style={styles.menuRow}>
+                   <View style={styles.menuIconBox}>
                       <Icon name={item.icon} size={20} color="#8E8E93" />
                    </View>
-                   <Text style={styles.menuText}>{item.title}</Text>
-                   <Icon name="chevron-forward" size={18} color="#3A3A3C" />
+                   <Text style={styles.menuItemText}>{item.title}</Text>
+                   <Icon name="chevron-forward" size={16} color="#333" />
                 </TouchableOpacity>
              ))}
           </View>
@@ -88,26 +127,36 @@ export default function ProfileScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#000' },
-  gradient: { flex: 1, paddingHorizontal: 24, paddingTop: 60 },
-  header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 30 },
-  headerTitle: { color: 'white', fontSize: 18, fontWeight: 'bold' },
-  profileSection: { alignItems: 'center', marginBottom: 30, backgroundColor: '#FFFFFF05', padding: 24, borderRadius: 30, borderWidth: 1, borderColor: '#FFFFFF10' },
-  avatarContainer: { width: 100, height: 100, borderRadius: 50, padding: 4, backgroundColor: '#FFFFFF10', marginBottom: 15 },
-  avatar: { width: '100%', height: '100%', borderRadius: 50 },
-  badgeIcon: { position: 'absolute', bottom: 0, right: 0, backgroundColor: '#1A1A1A', width: 28, height: 28, borderRadius: 14, alignItems: 'center', justifyContent: 'center', borderWidth: 2, borderColor: '#000' },
-  userName: { color: 'white', fontSize: 22, fontWeight: '900', letterSpacing: 0.5 },
-  userLoc: { color: '#8E8E93', fontSize: 14, marginTop: 4 },
-  tierContainer: { backgroundColor: '#FDCC0D15', paddingVertical: 6, paddingHorizontal: 16, borderRadius: 20, marginTop: 15, borderWidth: 1, borderColor: '#FDCC0D30' },
-  tierText: { color: '#FDCC0D', fontSize: 13, fontWeight: 'bold' },
-  kpText: { color: '#FDCC0D' },
-  subText: { color: '#666', fontSize: 11, marginTop: 10, fontWeight: 'bold' },
-  vendorToggleCard: { backgroundColor: '#1C1C1E', borderRadius: 25, padding: 20, marginBottom: 25, shadowColor: '#000', shadowOffset: { width: 0, height: 10 }, shadowOpacity: 0.2, shadowRadius: 20 },
-  vendorInfo: { flexDirection: 'row', alignItems: 'center' },
-  vendorIconBox: { width: 40, height: 40, borderRadius: 15, backgroundColor: '#00A86B15', alignItems: 'center', justifyContent: 'center' },
-  vendorTitle: { color: 'white', fontSize: 15, fontWeight: 'bold' },
-  vendorSub: { color: '#8E8E93', fontSize: 10, marginTop: 4, paddingRight: 40 },
-  menuContainer: { backgroundColor: '#111111', borderRadius: 30, paddingVertical: 10, paddingHorizontal: 5 },
-  menuItem: { flexDirection: 'row', alignItems: 'center', paddingVertical: 18, paddingHorizontal: 20, borderBottomWidth: 1, borderBottomColor: '#FFFFFF05' },
-  menuIconWrap: { width: 36, height: 36, borderRadius: 12, backgroundColor: '#FFFFFF05', alignItems: 'center', justifyContent: 'center', marginRight: 15 },
-  menuText: { flex: 1, color: '#E5E5EA', fontSize: 15, fontWeight: '600' }
+  gradient: { flex: 1 },
+  header: { paddingTop: 60, paddingHorizontal: 24, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  headerTitle: { color: 'white', fontSize: 20, fontWeight: '900' },
+  roundBtn: { width: 45, height: 45, borderRadius: 15, backgroundColor: '#1A1A1A', alignItems: 'center', justifyContent: 'center' },
+  profileHero: { alignItems: 'center', marginTop: 30, paddingBottom: 30 },
+  avatarWrap: { width: 110, height: 110, padding: 3, borderRadius: 55, backgroundColor: '#1A1A1A', position: 'relative' },
+  avatar: { width: '100%', height: '100%', borderRadius: 55 },
+  levelBadge: { position: 'absolute', bottom: -5, alignSelf: 'center', paddingHorizontal: 12, paddingVertical: 4, borderRadius: 12, borderWidth: 3, borderColor: '#0A0A0A' },
+  levelText: { color: 'black', fontSize: 10, fontWeight: '900' },
+  userName: { color: 'white', fontSize: 24, fontWeight: '900', marginTop: 15 },
+  userSub: { color: '#8E8E93', fontSize: 13, marginTop: 4, fontWeight: 'bold' },
+  kpStats: { flexDirection: 'row', marginTop: 25, backgroundColor: '#111', padding: 20, borderRadius: 25, width: width - 48 },
+  statBox: { flex: 1, alignItems: 'center' },
+  statDivider: { width: 1, height: '100%', backgroundColor: '#FFFFFF05' },
+  statVal: { color: '#00A86B', fontSize: 20, fontWeight: '900' },
+  statLab: { color: '#444', fontSize: 10, fontWeight: 'bold', marginTop: 4 },
+  sectionLabel: { color: '#444', fontSize: 11, fontWeight: '900', letterSpacing: 1.5, marginLeft: 24, marginTop: 10 },
+  badgeScroll: { marginTop: 15, paddingLeft: 24 },
+  badgeItem: { marginRight: 20, alignItems: 'center' },
+  badgeCircle: { width: 60, height: 60, borderRadius: 30, alignItems: 'center', justifyContent: 'center' },
+  badgeName: { color: '#8E8E93', fontSize: 10, fontWeight: 'bold', marginTop: 8 },
+  vendorCard: { marginHorizontal: 24, marginTop: 35, backgroundColor: '#111', padding: 20, borderRadius: 30, borderWidth: 1, borderColor: '#FFFFFF05' },
+  vendorHeader: { flexDirection: 'row', alignItems: 'center' },
+  vendorIconWrap: { width: 40, height: 40, borderRadius: 14, backgroundColor: '#00A86B15', alignItems: 'center', justifyContent: 'center' },
+  vendorTitle: { color: 'white', fontSize: 16, fontWeight: 'bold' },
+  vendorSubText: { color: '#444', fontSize: 11, marginTop: 2 },
+  dashBtn: { backgroundColor: '#00A86B', marginTop: 20, height: 50, borderRadius: 15, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' },
+  dashBtnText: { color: 'white', fontWeight: 'bold', marginRight: 10 },
+  menuList: { marginHorizontal: 24, marginTop: 30, backgroundColor: '#111', borderRadius: 30, paddingVertical: 10 },
+  menuRow: { flexDirection: 'row', alignItems: 'center', padding: 20, borderBottomWidth: 1, borderBottomColor: '#FFFFFF05' },
+  menuIconBox: { width: 36, height: 36, borderRadius: 12, backgroundColor: '#FFFFFF05', alignItems: 'center', justifyContent: 'center', marginRight: 15 },
+  menuItemText: { flex: 1, color: '#E0E0E0', fontSize: 15, fontWeight: '600' }
 });

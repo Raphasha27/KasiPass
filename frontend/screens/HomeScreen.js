@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Image, TextInput, ActivityIndicator, StyleSheet } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Image, TextInput, ActivityIndicator, StyleSheet, Dimensions } from 'react-native';
 import { Ionicons as Icon } from '@expo/vector-icons';
 import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
 import { LinearGradient } from 'expo-linear-gradient';
+
+const { width } = Dimensions.get('window');
 
 export default function HomeScreen({ navigation }) {
   const { user } = useAuth();
@@ -14,7 +16,7 @@ export default function HomeScreen({ navigation }) {
     (async () => {
       try {
         const res = await api.get('/listings/');
-        setListings(res.data.slice(0, 5));
+        setListings(res.data.slice(0, 4));
       } catch (err) {
         console.error("Failed to fetch listings", err);
       } finally {
@@ -24,94 +26,129 @@ export default function HomeScreen({ navigation }) {
   }, []);
 
   const categories = [
-    { id: '1', name: 'Events', icon: 'calendar', color: '#FDCC0D', desc: 'Modern description', screen: 'Explore' },
-    { id: '2', name: 'Transport', icon: 'bus', color: '#00A86B', desc: 'Transport and description', screen: 'TaxiTracking' },
-    { id: '3', name: 'Services', icon: 'settings', color: '#4CD964', desc: 'Services description', screen: 'Explore' },
+    { id: '1', name: 'Events', icon: 'calendar', color: '#FDCC0D', screen: 'Explore' },
+    { id: '2', name: 'Transport', icon: 'bus', color: '#00A86B', screen: 'TaxiTracking' },
+    { id: '3', name: 'Food', icon: 'fast-food', color: '#FF3B30', screen: 'Restaurants' },
+    { id: '4', name: 'Services', icon: 'construct', color: '#4CD964', screen: 'Explore' },
+  ];
+
+  const news = [
+    { id: '1', title: 'Moonlight Market', tag: 'Vibe', color: '#FDCC0D' },
+    { id: '2', title: 'No Loadshedding', tag: 'Utility', color: '#00A86B' },
+    { id: '3', title: 'New Taxi Route', tag: 'Travel', color: '#5856D6' },
   ];
 
   return (
     <View style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 100 }}>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 120 }}>
         
-        {/* Header */}
+        {/* Top Header */}
         <View style={styles.header}>
           <View>
-            <Text style={styles.greeting}>Hi, {user?.full_name?.split(' ')[0] || 'Thabo'}!</Text>
+            <Text style={styles.headerSmall}>Welcome back,</Text>
+            <Text style={styles.headerLarge}>{user?.full_name?.split(' ')[0] || 'Thabo'} 🇿🇦</Text>
           </View>
-          <TouchableOpacity style={styles.profileBadge}>
-             <Text style={styles.profileInitials}>TM</Text>
-             <View style={styles.onlineDot} />
+          <TouchableOpacity style={styles.brandBox}>
+            <Text style={styles.brandText}>KP</Text>
           </TouchableOpacity>
         </View>
 
-        {/* Search */}
-        <View style={styles.searchContainer}>
-          <Icon name="search-outline" size={20} color="#8E8E93" />
+        {/* Loyalty Reward Card - NEW FEATURE */}
+        <LinearGradient colors={['#1A1A1A', '#0D0D0D']} style={styles.loyaltyCard}>
+           <View style={styles.loyatyInfo}>
+              <View>
+                 <Text style={styles.kpLabel}>KASI POINTS</Text>
+                 <Text style={styles.kpValue}>4,250 <Text style={styles.kpUnit}>KP</Text></Text>
+                 <View style={styles.badgeRow}>
+                    <Icon name="medal" size={14} color="#FDCC0D" />
+                    <Text style={styles.badgeText}>Platinum Tier</Text>
+                 </View>
+              </View>
+              <LinearGradient colors={['#FDCC0D', '#E6B800']} style={styles.qrMini}>
+                 <Icon name="qr-code" size={32} color="black" />
+              </LinearGradient>
+           </View>
+           <View style={styles.progressTrack}>
+              <View style={styles.progressBar} />
+           </View>
+           <Text style={styles.nextReward}>750 KP until next community reward</Text>
+        </LinearGradient>
+
+        {/* Community News Ticker - NEW FEATURE */}
+        <View style={styles.sectionHeader}>
+           <Text style={styles.sectionTitle}>Community Hub</Text>
+           <View style={styles.liveDot} />
+        </View>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.newsScroll}>
+           {news.map(item => (
+             <TouchableOpacity key={item.id} style={[styles.newsItem, { borderColor: item.color + '30' }]}>
+                <View style={[styles.newsTag, { backgroundColor: item.color + '15' }]}>
+                   <Text style={[styles.newsTagText, { color: item.color }]}>{item.tag.toUpperCase()}</Text>
+                </View>
+                <Text style={styles.newsTitle}>{item.title}</Text>
+             </TouchableOpacity>
+           ))}
+        </ScrollView>
+
+        {/* Quick Search */}
+        <View style={styles.searchBar}>
+          <Icon name="search-outline" size={20} color="#444" />
           <TextInput 
-            placeholder="Explore Kasi..." 
-            placeholderTextColor="#8E8E93"
+            placeholder="Search deals, rides or food..." 
+            placeholderTextColor="#444"
             style={styles.searchInput}
           />
         </View>
 
-        {/* Categories */}
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.categoryScroll}>
-          {categories.map(cat => (
-            <TouchableOpacity 
-              key={cat.id} 
-              style={styles.categoryCard}
-              onPress={() => navigation.navigate(cat.screen)}
-            >
-              <View style={[styles.iconBox, { backgroundColor: cat.color }]}>
-                <Icon name={cat.icon} size={24} color="white" />
-              </View>
-              <Text style={styles.catName}>{cat.name}</Text>
-              <Text style={styles.catDesc} numberOfLines={1}>{cat.desc}</Text>
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
+        {/* Categories Grid */}
+        <View style={styles.catGrid}>
+           {categories.map(cat => (
+             <TouchableOpacity 
+               key={cat.id} 
+               style={styles.catBox}
+               onPress={() => navigation.navigate(cat.screen)}
+             >
+                <View style={[styles.catIconWrap, { backgroundColor: cat.color + '15' }]}>
+                   <Icon name={cat.icon} size={24} color={cat.color} />
+                </View>
+                <Text style={styles.catLabel}>{cat.name}</Text>
+             </TouchableOpacity>
+           ))}
+        </View>
 
-        {/* Section Header */}
-        <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Nearby Deals</Text>
+        {/* Trending Section */}
+        <View style={styles.sectionHeaderAlt}>
+          <Text style={styles.sectionTitle}>Nearby Hotspots</Text>
           <TouchableOpacity onPress={() => navigation.navigate('Explore')}>
-            <Text style={styles.seeAll}>See All</Text>
+            <Text style={styles.seeAll}>Explore All</Text>
           </TouchableOpacity>
         </View>
 
-        {/* Deals Grid */}
-        <View style={styles.dealsGrid}>
-          {loading ? (
-            <ActivityIndicator color="#00A86B" style={{ marginTop: 20 }} />
-          ) : (
-            listings.map(item => (
+        {loading ? (
+          <ActivityIndicator color="#00A86B" style={{ marginTop: 40 }} />
+        ) : (
+          <View style={styles.trendingScroll}>
+            {listings.map(item => (
               <TouchableOpacity 
                 key={item.id} 
-                style={styles.dealCard}
+                style={styles.trendingCard}
                 onPress={() => navigation.navigate('ListingDetail', { listingId: item.id })}
               >
-                <Image source={{ uri: item.image_url || 'https://images.unsplash.com/photo-1543165365-07232ed12faf?q=80&w=400' }} style={styles.dealImage} />
-                <View style={styles.dealInfo}>
-                  <Text style={styles.dealTitle} numberOfLines={1}>{item.title}</Text>
-                  <View style={styles.ratingRow}>
-                    <Icon name="star" size={12} color="#FDCC0D" />
-                    <Icon name="star" size={12} color="#FDCC0D" />
-                    <Icon name="star" size={12} color="#FDCC0D" />
-                    <Icon name="star" size={12} color="#FDCC0D" />
-                    <Text style={styles.ratingText}> Rating</Text>
-                  </View>
-                  <View style={styles.dealFooter}>
-                    <View style={styles.distRow}>
-                      <Icon name="location-outline" size={12} color="#8E8E93" />
-                      <Text style={styles.distText}> Distance</Text>
-                    </View>
-                    <Text style={styles.priceText}>R{item.price}</Text>
+                <Image source={{ uri: item.image_url || 'https://images.unsplash.com/photo-1543165365-07232ed12faf?q=80&w=400' }} style={styles.trendImage} />
+                <LinearGradient colors={['transparent', 'rgba(10,10,10,0.9)']} style={styles.trendOverlay} />
+                <View style={styles.trendContent}>
+                  <Text style={styles.trendTitle} numberOfLines={1}>{item.title}</Text>
+                  <View style={styles.trendMeta}>
+                     <Text style={styles.trendPrice}>R{item.price}</Text>
+                     <View style={styles.typeBadge}>
+                        <Text style={styles.typeText}>{item.type.toUpperCase()}</Text>
+                     </View>
                   </View>
                 </View>
               </TouchableOpacity>
-            ))
-          )}
-        </View>
+            ))}
+          </View>
+        )}
 
       </ScrollView>
     </View>
@@ -119,31 +156,47 @@ export default function HomeScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#FFFFFF' },
-  header: { paddingHorizontal: 20, paddingTop: 60, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  greeting: { fontSize: 24, fontWeight: '900', color: '#1A1A1A' },
-  profileBadge: { width: 40, height: 40, borderRadius: 20, backgroundColor: '#E5E5EA', alignItems: 'center', justifyContent: 'center' },
-  profileInitials: { fontWeight: 'bold', color: '#8E8E93' },
-  onlineDot: { position: 'absolute', bottom: 0, right: 0, width: 10, height: 10, borderRadius: 5, backgroundColor: '#4CD964', borderWeight: 2, borderColor: 'white' },
-  searchContainer: { marginHorizontal: 20, marginTop: 20, backgroundColor: '#F2F2F7', borderRadius: 15, paddingHorizontal: 15, height: 50, flexDirection: 'row', alignItems: 'center' },
-  searchInput: { flex: 1, marginLeft: 10, fontSize: 16, fontWeight: '500' },
-  categoryScroll: { marginTop: 25, paddingLeft: 20 },
-  categoryCard: { width: 110, height: 120, marginRight: 15, backgroundColor: 'white', borderRadius: 20, padding: 15, shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.05, shadowRadius: 10, elevation: 5, borderWidth: 1, borderColor: '#F2F2F7' },
-  iconBox: { width: 36, height: 36, borderRadius: 12, alignItems: 'center', justifyContent: 'center', marginBottom: 10 },
-  catName: { fontSize: 13, fontWeight: 'bold', color: '#1C1C1E' },
-  catDesc: { fontSize: 9, color: '#8E8E93', marginTop: 4 },
-  sectionHeader: { marginHorizontal: 20, marginTop: 35, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  sectionTitle: { fontSize: 20, fontWeight: 'bold', color: '#1C1C1E' },
-  seeAll: { fontSize: 14, color: '#00A86B', fontWeight: 'bold' },
-  dealsGrid: { paddingHorizontal: 20, marginTop: 20, flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' },
-  dealCard: { width: '48%', backgroundColor: 'white', borderRadius: 25, marginBottom: 20, shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.05, shadowRadius: 10, elevation: 5, overflow: 'hidden' },
-  dealImage: { width: '100%', height: 120 },
-  dealInfo: { padding: 12 },
-  dealTitle: { fontWeight: 'bold', fontSize: 14, color: '#1C1C1E' },
-  ratingRow: { flexDirection: 'row', alignItems: 'center', marginTop: 4 },
-  ratingText: { fontSize: 10, color: '#8E8E93', marginLeft: 4 },
-  dealFooter: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 8 },
-  distRow: { flexDirection: 'row', alignItems: 'center' },
-  distText: { fontSize: 10, color: '#8E8E93' },
-  priceText: { fontSize: 14, fontWeight: 'bold', color: '#00A86B' }
+  container: { flex: 1, backgroundColor: '#0A0A0A' },
+  header: { paddingHorizontal: 24, paddingTop: 60, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  headerSmall: { color: '#8E8E93', fontSize: 13, fontWeight: 'bold', letterSpacing: 0.5 },
+  headerLarge: { color: 'white', fontSize: 28, fontWeight: '900', marginTop: 4 },
+  brandBox: { width: 50, height: 50, borderRadius: 18, backgroundColor: '#00A86B', alignItems: 'center', justifyContent: 'center', shadowColor: '#00A86B', shadowOpacity: 0.5, shadowRadius: 15, elevation: 15 },
+  brandText: { color: 'white', fontWeight: '900', fontSize: 18 },
+  loyaltyCard: { marginHorizontal: 24, marginTop: 25, borderRadius: 35, padding: 24, borderWidth: 1, borderColor: '#FFFFFF10', shadowColor: '#000', shadowOpacity: 0.5, shadowRadius: 20 },
+  loyatyInfo: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  kpLabel: { color: '#8E8E93', fontSize: 10, fontWeight: '900', letterSpacing: 1.5 },
+  kpValue: { color: 'white', fontSize: 32, fontWeight: '900', marginTop: 4 },
+  kpUnit: { color: '#00A86B', fontSize: 16 },
+  badgeRow: { flexDirection: 'row', alignItems: 'center', marginTop: 4 },
+  badgeText: { color: '#FDCC0D', fontSize: 12, fontWeight: 'bold', marginLeft: 6 },
+  qrMini: { width: 60, height: 60, borderRadius: 20, alignItems: 'center', justifyContent: 'center' },
+  progressTrack: { height: 6, backgroundColor: '#222', borderRadius: 10, marginTop: 20, overflow: 'hidden' },
+  progressBar: { height: '100%', width: '75%', backgroundColor: '#FDCC0D' },
+  nextReward: { color: '#444', fontSize: 11, marginTop: 12, fontWeight: 'bold' },
+  sectionHeader: { marginHorizontal: 24, marginTop: 35, flexDirection: 'row', alignItems: 'center' },
+  sectionTitle: { color: 'white', fontSize: 20, fontWeight: '900' },
+  liveDot: { width: 10, height: 10, borderRadius: 5, backgroundColor: '#FF3B30', marginLeft: 10, shadowColor: '#FF3B30', shadowOpacity: 0.7, shadowRadius: 5 },
+  newsScroll: { marginTop: 15, paddingLeft: 24 },
+  newsItem: { width: 160, backgroundColor: '#111', padding: 16, borderRadius: 25, marginRight: 15, borderWidth: 1 },
+  newsTag: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 10, alignSelf: 'flex-start', marginBottom: 10 },
+  newsTagText: { fontSize: 8, fontWeight: 'bold' },
+  newsTitle: { color: 'white', fontSize: 14, fontWeight: 'bold' },
+  searchBar: { marginHorizontal: 24, marginTop: 30, backgroundColor: '#111', height: 60, borderRadius: 20, paddingHorizontal: 20, flexDirection: 'row', alignItems: 'center', borderWidth: 1, borderColor: '#FFFFFF05' },
+  searchInput: { flex: 1, marginLeft: 12, color: 'white', fontSize: 15, fontWeight: '600' },
+  catGrid: { marginHorizontal: 24, marginTop: 30, flexDirection: 'row', justifyContent: 'space-between' },
+  catBox: { width: '22%', alignItems: 'center' },
+  catIconWrap: { width: 64, height: 64, borderRadius: 22, alignItems: 'center', justifyContent: 'center', marginBottom: 10 },
+  catLabel: { color: '#8E8E93', fontSize: 11, fontWeight: 'bold' },
+  sectionHeaderAlt: { marginHorizontal: 24, marginTop: 40, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  seeAll: { color: '#00A86B', fontSize: 14, fontWeight: 'bold' },
+  trendingScroll: { paddingHorizontal: 24, marginTop: 20, flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' },
+  trendingCard: { width: '48%', height: 220, borderRadius: 30, marginBottom: 20, overflow: 'hidden', borderWidth: 1, borderColor: '#FFFFFF05' },
+  trendImage: { width: '100%', height: '100%' },
+  trendOverlay: { position: 'absolute', inset: 0 },
+  trendContent: { position: 'absolute', bottom: 16, left: 16, right: 16 },
+  trendTitle: { color: 'white', fontSize: 14, fontWeight: 'bold' },
+  trendMeta: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 8 },
+  trendPrice: { color: '#00A86B', fontSize: 16, fontWeight: '900' },
+  typeBadge: { backgroundColor: 'rgba(255,255,255,0.1)', paddingHorizontal: 8, paddingVertical: 4, borderRadius: 8 },
+  typeText: { color: 'white', fontSize: 8, fontWeight: 'bold' }
 });
