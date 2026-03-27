@@ -1,8 +1,9 @@
 import React, { useState, useRef } from 'react';
 import {
-  View, Text, TextInput, TouchableOpacity, ScrollView,
+  View, Text, TextInput, TouchableOpacity, ScrollView, Image,
   ActivityIndicator, Alert, Animated, KeyboardAvoidingView, Platform, StyleSheet,
 } from 'react-native';
+const logoImg = require('../assets/logo_v4_final.png');
 import { Ionicons as Icon } from '@expo/vector-icons';
 import { useAuth } from '../context/AuthContext';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -69,13 +70,13 @@ export default function LoginScreen() {
         >
           <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="handled">
             
-            {/* Hero */}
+            {/* Hero Branding */}
             <View style={styles.hero}>
-              <View style={styles.logoBox}>
-                <Icon name="ticket" size={48} color="white" />
-              </View>
-              <Text style={styles.logoText}>KasiPass</Text>
-              <Text style={styles.subText}>Community OS for the kasi</Text>
+              <Image 
+                source={logoImg} 
+                style={{ width: '100%', height: 200 }} 
+                resizeMode="contain"
+              />
             </View>
 
             {/* Form Section */}

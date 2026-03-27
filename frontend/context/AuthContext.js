@@ -31,19 +31,26 @@ export function AuthProvider({ children }) {
   }, []);
 
   const login = async (email, password) => {
-    const params = new URLSearchParams();
-    params.append('username', email);
-    params.append('password', password);
-    const res = await api.post('/users/token', params, {
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    });
-    const { access_token } = res.data;
-    await AsyncStorage.setItem('kasipass_token', access_token);
-    setAuthToken(access_token);
-    const me = await api.get('/users/me');
-    setToken(access_token);
-    setUser(me.data);
-    return me.data;
+    try {
+      // Manual URL encoding for high compatibility in React Native
+      const body = `username=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`;
+      
+      const res = await api.post('/users/token', body, {
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      });
+      
+      const { access_token } = res.data;
+      await AsyncStorage.setItem('kasipass_token', access_token);
+      setAuthToken(access_token);
+      
+      const me = await api.get('/users/me');
+      setToken(access_token);
+      setUser(me.data);
+      return me.data;
+    } catch (err) {
+      console.error("Login attempt failed:", err.message, err.response?.data);
+      throw err;
+    }
   };
 
   const register = async (email, password, fullName) => {

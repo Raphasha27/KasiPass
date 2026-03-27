@@ -1,0 +1,7 @@
+{
+  "include": ["."],
+  "exclude": ["**/node_modules", "**/__pycache__", "frontend/.expo", "frontend/dist"],
+  "typeCheckingMode": "basic",
+  "reportMissingImports": "none",
+  "reportMissingModuleSource": "none"
+}

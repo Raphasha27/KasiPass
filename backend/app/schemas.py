@@ -95,6 +95,8 @@ class TaxiLocation(TaxiLocationBase):
 class PanicAlertBase(BaseModel):
     latitude: float
     longitude: float
+    description: Optional[str] = None
+    severity: Optional[str] = "high"
 
 class PanicAlertCreate(PanicAlertBase):
     pass

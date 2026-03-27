@@ -18,9 +18,14 @@ dependencies = [
 ]
 
 [tool.pyright]
-include = ["app"]
+include = ["app", "seed.py"]
+exclude = ["**/__pycache__"]
 reportMissingImports = true
 reportMissingTypeStubs = false
-pythonVersion = "3.12"
-pythonPlatform = "Windows"
+pythonVersion = "3.14"
 typeCheckingMode = "basic"
+extraPaths = ["."]
+
+[tool.setuptools]
+package-dir = {"" = "."}
+packages = ["app"]

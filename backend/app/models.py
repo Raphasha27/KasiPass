@@ -80,6 +80,8 @@ class PanicAlert(Base):
     user_id = Column(Integer, ForeignKey("users.id"))
     latitude = Column(Float)
     longitude = Column(Float)
+    description = Column(String, nullable=True)
+    severity = Column(String, default="high") # low, medium, high
     status = Column(String, default="active") # active, resolved, cancelled
     created_at = Column(DateTime, default=datetime.utcnow)
 

@@ -1,15 +1,19 @@
 {
-  "include": [
-    "app"
-  ],
+  "include": ["app", "seed.py"],
+  "exclude": ["**/__pycache__"],
   "pythonVersion": "3.14",
   "pythonPlatform": "Windows",
   "pythonPath": "C:\\Python314\\python.exe",
   "typeCheckingMode": "basic",
-  "reportMissingImports": true,
-  "extraPaths": [
-    "C:\\Python314\\Lib\\site-packages",
-    "C:\\Python314\\Lib",
-    "."
+  "reportMissingImports": "none",
+  "reportMissingModuleSource": "none",
+  "executionEnvironments": [
+    {
+      "root": ".",
+      "extraPaths": [
+        ".",
+        "C:\\Python314\\Lib\\site-packages"
+      ]
+    }
   ]
 }

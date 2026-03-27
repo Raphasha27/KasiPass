@@ -16,6 +16,8 @@ def trigger_panic(
         user_id=current_user.id,
         latitude=alert_in.latitude,
         longitude=alert_in.longitude,
+        description=alert_in.description,
+        severity=alert_in.severity or "high",
         status="active"
     )
     db.add(panic_alert)

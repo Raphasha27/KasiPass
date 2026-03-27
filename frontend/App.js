@@ -1,18 +1,20 @@
 import 'react-native-gesture-handler';
-import { enableScreens } from 'react-native-screens';
 import { registerRootComponent } from 'expo';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-enableScreens();
 import React from 'react';
 import { ActivityIndicator, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons as Icon } from '@expo/vector-icons';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { enableScreens } from 'react-native-screens';
+
+enableScreens();
 
 import { AuthProvider, useAuth } from './context/AuthContext';
 
 // Screens
+import GetStartedScreen from './screens/GetStartedScreen';
 import LoginScreen from './screens/LoginScreen';
 import HomeScreen from './screens/HomeScreen';
 import ExploreScreen from './screens/ExploreScreen';
@@ -47,15 +49,20 @@ function MainTabs() {
         tabBarActiveTintColor: '#00A86B',
         tabBarInactiveTintColor: '#9CA3AF',
         tabBarStyle: {
-          backgroundColor: '#fff',
+          backgroundColor: '#111',
           borderTopWidth: 0,
-          elevation: 20,
+          elevation: 25,
           shadowColor: '#000',
-          shadowOpacity: 0.08,
-          shadowRadius: 20,
-          height: 70,
-          paddingBottom: 12,
-          paddingTop: 8,
+          shadowOpacity: 0.5,
+          shadowRadius: 25,
+          height: 85,
+          paddingBottom: 25,
+          paddingTop: 10,
+          position: 'absolute',
+          bottom: 20,
+          left: 15,
+          right: 15,
+          borderRadius: 30,
         },
         tabBarLabelStyle: { fontSize: 11, fontWeight: '600' },
         headerShown: false,
@@ -75,7 +82,7 @@ function AppNavigator() {
 
   if (loading) {
     return (
-      <View style={{ flex: 1, backgroundColor: '#0A0A0A', justifyContent: 'center', alignItems: 'center' }}>
+      <View style={{ flex: 1, backgroundColor: '#070707', justifyContent: 'center', alignItems: 'center' }}>
         <ActivityIndicator size="large" color="#00A86B" />
       </View>
     );
@@ -83,9 +90,12 @@ function AppNavigator() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="GetStarted">
         {!user ? (
-          <Stack.Screen name="Login" component={LoginScreen} />
+          <>
+            <Stack.Screen name="GetStarted" component={GetStartedScreen} />
+            <Stack.Screen name="Login" component={LoginScreen} />
+          </>
         ) : (
           <>
             <Stack.Screen name="Main" component={MainTabs} />
@@ -103,7 +113,8 @@ function AppNavigator() {
     </NavigationContainer>
   );
 }
-export default function App() {
+
+function App() {
   return (
     <SafeAreaProvider>
       <AuthProvider>
