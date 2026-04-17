@@ -14,7 +14,11 @@ updates:
       frontend-deps:
         patterns:
           - "*"
-    
+          
+    # Ignore all updates based on user request to completely silence Dependabot
+    ignore:
+      - dependency-name: "*"
+      
     # Limit number of non-grouped open PRs
     open-pull-requests-limit: 1
 
