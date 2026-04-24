@@ -12,7 +12,8 @@ jobs:
 
     runs-on: strategy:
       matrix:
-        node-version: # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+        node-version: # See supported Node.js release schedule at
+    https://nodejs.org/en/about/releases/
 
     steps:
     - uses: actions/checkout@v4
@@ -29,7 +30,8 @@ jobs:
       working-directory: ./frontend
   security_scan: 
     name: Security Scan (Trivy)
-    runs-on: - uses: actions/checkout@v4
+    runs-on: -
+    uses: actions/checkout@v4
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
