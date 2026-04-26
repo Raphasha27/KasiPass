@@ -16,9 +16,15 @@ jobs:
     https://nodejs.org/en/about/releases/
 
     steps:
+<<<<<<< HEAD
       - uses: actions/checkout@v4
       - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
+=======
+    - uses: actions/checkout@v4
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v6
+>>>>>>> bf8db9257d6e2b5684abdf084d85324b7afd54e2
       with:
         node-version: 20
         cache-dependency-path: 'frontend/package-lock.json'
