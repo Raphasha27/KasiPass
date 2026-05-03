@@ -1,56 +1,41 @@
-# 🇿🇦 KasiPass — Digitizing the Township Economy
+# 🚀 KasiPass: Community OS
 
-[![Kirov Dynamics](https://img.shields.io/badge/Kirov_Dynamics-Sovereign_Infrastructure-002D62?style=for-the-badge&labelColor=0d1117)](https://github.com/Raphasha27)
-![Status](https://img.shields.io/badge/Status-🏗️_Scaling-FF9D00?style=for-the-badge&labelColor=0d1117)
-![Focus](https://img.shields.io/badge/Focus-Digital_Inclusion-3fb950?style=for-the-badge&labelColor=0d1117)
+Welcome to **KasiPass**, a comprehensive Community OS designed to empower local communities with a digital ecosystem. Built for the South African market standard, it offers seamless integration of services directly on your mobile device.
 
-**KasiPass** is a high-integrity community operating system designed to bridge the digital divide in South African townships, starting with **Atteridgeville**. By integrating fintech, local business directory services, and secure digital identity, KasiPass empowers local entrepreneurs and residents to participate in the formal digital economy.
+## 📱 Architecture
 
----
+This project is a full-stack mobile application structured into two main components:
 
-## 🚀 Key Features
+*   **Frontend (Mobile App)**: Built using React Native and Expo. It delivers a fast, responsive, and native-like experience on both Android and iOS devices.
+*   **Backend (API Server)**: Powered by FastAPI (Python), offering high performance, automatic interactive documentation, and robust data handling.
 
-- **📱 Secure Digital ID**: A sovereign identity system for residents to access local services.
-- **💸 Local Fintech Hub**: Low-barrier digital payments and peer-to-peer transfers optimized for township connectivity.
-- **🏗️ Business Growth Engine**: A platform for local "spaza" shops and entrepreneurs to showcase products and manage inventory.
-- **🛡️ Secure Verification**: High-integrity verification protocols to prevent fraud within the community ecosystem.
+## 🌟 Key Features
 
----
+*   **Cross-Platform Delivery**: Write once, deploy to both Android (APK) and iOS through Expo Application Services (EAS).
+*   **High Performance**: FastAPI backend with asynchronous endpoint processing.
+*   **Scalable Deployment**: Ready for transition from SQLite to PostgreSQL for production environments.
 
-## 🏗️ Technical Stack
+## 🛠️ Quick Start
 
-- **Frontend**: React Native with Expo (v54+) for cross-platform Android & iOS deployment.
-- **Backend**: FastAPI (Python 3.11+) for high-performance asynchronous API services.
-- **Infrastructure**: Kirov Dynamics Sovereign Blueprint for secure data handling.
+### Backend (FastAPI)
+```bash
+cd backend
+python -m venv venv
+# activate venv
+pip install -r requirements.txt
+uvicorn app.main:app --reload
+```
 
----
+### Frontend (Expo)
+```bash
+cd frontend
+npm install
+npx expo start
+```
 
-## 📖 Getting Started
+## 🏗️ Production Build
 
-### Prerequisites
-- Node.js 18+
-- Python 3.11+
-- Expo Go app on your mobile device
-
-### Installation
-1. **Frontend Setup**
-   ```bash
-   cd frontend
-   npm install
-   npx expo start
-   ```
-2. **Backend Setup**
-   ```bash
-   cd backend
-   pip install -r requirements.txt
-   python main.py
-   ```
+Refer to `BUILD.md` for detailed instructions on generating Android APKs and iOS production builds using the EAS CLI.
 
 ---
-
-## 🇿🇦 Mission: Digital South Africa
-KasiPass is part of the **Kirov Dynamics Technology** initiative to build scalable, locally-relevant solutions that tackle unemployment and grow the South African economy through software excellence.
-
----
-
-**© 2026 Kirov Dynamics Technology. All Rights Reserved.**
+*Developed by Kirov Dynamics Technology.*
