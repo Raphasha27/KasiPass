@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>ðŸ‡¿ðŸ‡¦ KasiPass â€” Digitizing the Township Economy | Kirov Dynamics Showcase</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
@@ -17,12 +17,18 @@
         
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
+        html, body {
+            overflow-x: hidden;
+        }
+
         body {
             background-color: var(--bg);
             color: var(--text);
             font-family: 'Inter', sans-serif;
             line-height: 1.6;
             overflow-x: hidden;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
         }
 
         .gradient-bg {
@@ -57,9 +63,22 @@
 
         h1 {
             font-family: 'Outfit', sans-serif;
-            font-size: 3.5rem;
+            font-size: clamp(2rem, 8vw, 3.5rem);
             color: var(--header);
             margin-bottom: 20px;
+            overflow-wrap: break-word;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 48px 16px;
+            }
+            header {
+                margin-bottom: 40px;
+            }
+            .badge-container {
+                gap: 8px;
+            }
         }
 
         .badge-container {
